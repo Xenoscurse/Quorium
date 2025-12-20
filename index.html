@@ -4,250 +4,238 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Osium - Minecraft Texture Optimizer</title>
-    <meta name="description" content="Advanced texture atlas optimizer for Minecraft. Reduce draw calls, boost FPS.">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22 fill=%22%23ffffff%22>⚙️</text></svg>">
+    <meta name="description" content="Make Minecraft buttery smooth. Advanced texture optimization for gamers who care about performance.">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22 fill=%22%23ffffff%22>✨</text></svg>">
     <style>
-        /* CONFIGURATION - Easy to edit colors */
+        /* LIQUID GLASS THEME - iOS 26 Inspired */
         :root {
-            /* Color Theme - Chrome & Black */
-            --chrome-primary: #ffffff;
-            --chrome-secondary: #cccccc;
-            --chrome-accent: #888888;
-            --chrome-glow: rgba(255, 255, 255, 0.1);
-            --bg-black: #000000;
-            --bg-dark: #0a0a0a;
-            --bg-card: #111111;
-            --border-chrome: #333333;
-            --text-primary: #ffffff;
-            --text-secondary: #aaaaaa;
-            --text-muted: #666666;
+            /* Glass Morphism Colors */
+            --glass-bg: rgba(10, 10, 20, 0.7);
+            --glass-card: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --glass-highlight: rgba(255, 255, 255, 0.2);
             
-            /* Effects */
-            --glow: 0 0 20px rgba(255, 255, 255, 0.1);
-            --glow-strong: 0 0 40px rgba(255, 255, 255, 0.2);
-            --radius: 12px;
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            /* Accent Colors - Gentle gradients */
+            --accent-primary: linear-gradient(135deg, #8A8AFF 0%, #6C6CFF 100%);
+            --accent-secondary: linear-gradient(135deg, #FF8A8A 0%, #FF6C6C 100%);
+            --accent-glow: radial-gradient(circle at center, rgba(138, 138, 255, 0.3), transparent 70%);
+            
+            /* Text Colors - Soft and readable */
+            --text-primary: rgba(255, 255, 255, 0.95);
+            --text-secondary: rgba(255, 255, 255, 0.7);
+            --text-tertiary: rgba(255, 255, 255, 0.5);
+            
+            /* Background Layers */
+            --bg-base: #000010;
+            --bg-gradient: radial-gradient(circle at 20% 50%, #1A1A2E 0%, #000010 100%);
+            
+            /* Liquid Effects */
+            --blur-amount: 20px;
+            --transition-smooth: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+            --transition-bouncy: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            
+            /* Glass Properties */
+            --glass-radius: 24px;
+            --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            --glass-inset: inset 0 1px 0 rgba(255, 255, 255, 0.1);
         }
         
-        /* MESSAGES - Easy to edit text */
-        /* Edit these values below: */
-        
-        /* Header Messages */
-        --title: "Osium Texture Optimizer";
-        --subtitle: "Advanced GPU-level texture optimization for Minecraft. Maximize performance, minimize overhead.";
-        --tagline: "Next-generation rendering optimization";
-        
-        /* Feature Titles */
-        --feature-1-title: "GPU-Accelerated Optimization";
-        --feature-1-desc: "Leverages modern GPU capabilities for real-time texture processing and rendering optimization.";
-        
-        --feature-2-title: "Intelligent Texture Streaming";
-        --feature-2-desc: "Dynamic texture loading and caching system that adapts to your hardware capabilities.";
-        
-        --feature-3-title: "Zero-Overhead Integration";
-        --feature-3-desc: "Seamless compatibility with modern mod loaders and rendering engines.";
-        
-        --feature-4-title: "Real-time Performance Analytics";
-        --feature-4-desc: "Advanced monitoring and optimization suggestions based on your system performance.";
-        
-        --feature-5-title: "Automated Configuration";
-        --feature-5-desc: "Self-optimizing settings that adapt to your gameplay patterns and system specifications.";
-        
-        --feature-6-title: "Future-Proof Architecture";
-        --feature-6-desc: "Designed for next-generation Minecraft rendering and upcoming GPU technologies.";
-        
-        /* Stats */
-        --stat-1-value: "87%";
-        --stat-1-label: "Avg. Performance Gain";
-        --stat-2-value: "94%";
-        --stat-2-label: "Texture Efficiency";
-        --stat-3-value: "0ms";
-        --stat-3-label: "Added Latency";
-        --stat-4-value: "∞";
-        --stat-4-label: "Scalability";
-        
-        /* Download Messages */
-        --download-title: "Availability";
-        --download-subtitle: "Optimized for modern Minecraft ecosystems and deployment platforms.";
-        --platform-1-name: "Modrinth";
-        --platform-1-desc: "Primary distribution platform with automated updates and version management.";
-        --platform-2-name: "Official Site";
-        --platform-2-desc: "Direct downloads, documentation, and advanced configuration options.";
-        
-        /* Footer Messages */
-        --footer-copyright: "© 2025 Osium Mod";
-        --footer-tagline: "Redefining Minecraft performance";
-        --footer-disclaimer: "Osium is an independent optimization project. Minecraft is a trademark of Mojang Studios.";
-        
-        /* Reset & Base */
+        /* Reset with personality */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            scroll-behavior: smooth;
+            -webkit-tap-highlight-color: transparent;
         }
         
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-            background: var(--bg-black);
+            font-family: -apple-system, 'SF Pro Display', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-base);
+            background-image: var(--bg-gradient);
             color: var(--text-primary);
             line-height: 1.6;
+            min-height: 100vh;
             overflow-x: hidden;
+            font-weight: 400;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+            scroll-behavior: smooth;
         }
         
-        /* Chrome Effects */
-        .chrome-border {
-            border: 1px solid var(--border-chrome);
-            background: linear-gradient(145deg, rgba(255,255,255,0.02), rgba(0,0,0,0.3));
-            position: relative;
-        }
-        
-        .chrome-border::before {
+        /* Liquid Glass Background */
+        body::before {
             content: '';
-            position: absolute;
-            top: -1px;
-            left: -1px;
-            right: -1px;
-            bottom: -1px;
-            background: linear-gradient(145deg, 
-                rgba(255,255,255,0.1) 0%,
-                transparent 20%,
-                transparent 80%,
-                rgba(255,255,255,0.05) 100%);
-            border-radius: inherit;
-            z-index: -1;
-            pointer-events: none;
-        }
-        
-        /* Navigation */
-        .navbar {
             position: fixed;
             top: 0;
-            width: 100%;
-            background: rgba(0, 0, 0, 0.95);
-            backdrop-filter: blur(20px);
-            z-index: 1000;
-            padding: 1.2rem 0;
-            border-bottom: 1px solid var(--border-chrome);
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 15% 20%, rgba(138, 138, 255, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 85% 30%, rgba(255, 138, 138, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 50% 80%, rgba(108, 108, 255, 0.08) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+            animation: liquidFloat 20s ease-in-out infinite;
         }
         
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
+        @keyframes liquidFloat {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(-10px, 10px) scale(1.02); }
+            66% { transform: translate(10px, -10px) scale(0.98); }
+        }
+        
+        /* Glass Container */
+        .glass-container {
+            background: var(--glass-card);
+            backdrop-filter: blur(var(--blur-amount));
+            -webkit-backdrop-filter: blur(var(--blur-amount));
+            border: 1px solid var(--glass-border);
+            border-radius: var(--glass-radius);
+            box-shadow: var(--glass-shadow), var(--glass-inset);
+            transition: var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .glass-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--glass-highlight), transparent);
+        }
+        
+        .glass-container:hover {
+            transform: translateY(-4px);
+            border-color: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4), var(--glass-inset);
+        }
+        
+        /* Navigation - Floating Glass Bar */
+        .navbar {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 600px;
+            z-index: 1000;
+            padding: 0.8rem 2rem;
+        }
+        
+        .nav-content {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
         
         .logo {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            text-decoration: none;
+            font-size: 1.4rem;
             font-weight: 700;
-            font-size: 1.5rem;
-            background: linear-gradient(90deg, var(--chrome-primary), var(--chrome-secondary));
+            background: var(--accent-primary);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
             letter-spacing: -0.5px;
+            text-decoration: none;
+            transition: var(--transition-smooth);
         }
         
-        .logo-icon {
-            width: 40px;
-            height: 40px;
-            background: var(--chrome-primary);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--bg-black);
-            font-weight: 900;
-            font-family: 'Courier New', monospace;
-            font-size: 1.2rem;
-            box-shadow: var(--glow);
+        .logo:hover {
+            opacity: 0.9;
+            transform: scale(1.05);
         }
         
         .nav-links {
             display: flex;
-            gap: 2.5rem;
-            align-items: center;
+            gap: 2rem;
         }
         
         .nav-links a {
             color: var(--text-secondary);
             text-decoration: none;
+            font-size: 0.9rem;
             font-weight: 500;
-            font-size: 0.95rem;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            transition: var(--transition-smooth);
             position: relative;
-            padding: 0.5rem 0;
-            transition: var(--transition);
         }
         
         .nav-links a::after {
             content: '';
             position: absolute;
             bottom: 0;
-            left: 0;
+            left: 50%;
+            transform: translateX(-50%);
             width: 0;
-            height: 1px;
-            background: var(--chrome-primary);
-            transition: var(--transition);
+            height: 2px;
+            background: var(--accent-primary);
+            border-radius: 2px;
+            transition: var(--transition-smooth);
         }
         
         .nav-links a:hover,
         .nav-links a.active {
-            color: var(--chrome-primary);
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.05);
         }
         
         .nav-links a:hover::after,
         .nav-links a.active::after {
-            width: 100%;
+            width: 20px;
         }
         
-        /* Hero Section */
+        /* Hero Section - Human Centered */
         .hero {
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 8rem 2rem 4rem;
+            padding: 6rem 2rem 4rem;
+            text-align: center;
             position: relative;
-            overflow: hidden;
-        }
-        
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 100%;
-            height: 100%;
-            background: 
-                radial-gradient(circle at 20% 30%, rgba(255,255,255,0.03) 0%, transparent 50%),
-                radial-gradient(circle at 80% 70%, rgba(255,255,255,0.02) 0%, transparent 50%);
-            pointer-events: none;
         }
         
         .hero-content {
-            max-width: 900px;
-            text-align: center;
+            max-width: 800px;
             position: relative;
             z-index: 1;
         }
         
+        .hero-badge {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-badge::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50px;
+            backdrop-filter: blur(10px);
+            z-index: -1;
+        }
+        
         .hero-title {
-            font-size: 4rem;
-            font-weight: 800;
+            font-size: 3.5rem;
+            font-weight: 700;
             line-height: 1.1;
             margin-bottom: 1.5rem;
-            background: linear-gradient(90deg, var(--chrome-primary), var(--chrome-secondary));
+            background: var(--accent-primary);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
@@ -258,147 +246,172 @@
             font-size: 1.3rem;
             color: var(--text-secondary);
             margin-bottom: 3rem;
-            max-width: 700px;
+            line-height: 1.8;
+            max-width: 600px;
             margin-left: auto;
             margin-right: auto;
-            line-height: 1.8;
         }
         
-        .tagline {
-            display: inline-block;
-            padding: 0.8rem 1.8rem;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--border-chrome);
-            border-radius: 50px;
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            letter-spacing: 1px;
-            margin-bottom: 3rem;
+        /* Human Touch - Personal Message */
+        .human-message {
+            font-size: 1.1rem;
+            color: var(--text-tertiary);
+            font-style: italic;
+            margin: 2rem 0;
+            padding: 1.5rem;
+            border-left: 3px solid;
+            border-image: var(--accent-primary);
+            border-image-slice: 1;
+            text-align: left;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
         }
         
-        /* Scroll Indicator */
-        .scroll-indicator {
-            position: absolute;
-            bottom: 3rem;
-            left: 50%;
-            transform: translateX(-50%);
+        /* Action Buttons - Playful & Responsive */
+        .action-buttons {
             display: flex;
-            flex-direction: column;
-            align-items: center;
             gap: 1rem;
-            color: var(--text-muted);
-            font-size: 0.8rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
+            justify-content: center;
+            margin: 3rem 0;
+            flex-wrap: wrap;
         }
         
-        .scroll-line {
-            width: 1px;
-            height: 60px;
-            background: linear-gradient(to bottom, var(--chrome-primary), transparent);
-        }
-        
-        /* Sections */
-        section {
-            padding: 6rem 2rem;
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: var(--transition-bouncy);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
             position: relative;
+            overflow: hidden;
         }
         
-        .section-container {
-            max-width: 1200px;
-            margin: 0 auto;
+        .btn-primary {
+            background: var(--accent-primary);
+            color: white;
+            box-shadow: 0 4px 20px rgba(138, 138, 255, 0.3);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 30px rgba(138, 138, 255, 0.4);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-3px);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        /* Features Section - Conversational */
+        .features {
+            padding: 6rem 2rem;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
         }
         
         .section-title {
             font-size: 2.5rem;
             font-weight: 700;
-            margin-bottom: 4rem;
-            text-align: center;
-            background: linear-gradient(90deg, var(--chrome-primary), var(--chrome-secondary));
+            margin-bottom: 1rem;
+            background: var(--accent-primary);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            letter-spacing: -0.5px;
         }
         
         .section-subtitle {
-            text-align: center;
             color: var(--text-secondary);
             font-size: 1.1rem;
             max-width: 600px;
-            margin: 0 auto 4rem;
+            margin: 0 auto;
             line-height: 1.8;
         }
         
-        /* Features Grid */
         .features-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
-            margin-top: 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
         }
         
         .feature-card {
             padding: 2.5rem;
-            border-radius: var(--radius);
-            transition: var(--transition);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .feature-card.chrome-border {
-            transition: var(--transition);
-        }
-        
-        .feature-card.chrome-border:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--glow-strong);
-            border-color: var(--chrome-accent);
         }
         
         .feature-icon {
             font-size: 2.5rem;
             margin-bottom: 1.5rem;
-            color: var(--chrome-primary);
-            opacity: 0.9;
+            display: inline-block;
+            transition: var(--transition-bouncy);
+        }
+        
+        .feature-card:hover .feature-icon {
+            transform: scale(1.2) rotate(5deg);
         }
         
         .feature-card h3 {
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             margin-bottom: 1rem;
-            color: var(--chrome-primary);
+            color: var(--text-primary);
             font-weight: 600;
         }
         
         .feature-card p {
             color: var(--text-secondary);
             line-height: 1.8;
-            font-size: 0.95rem;
+            font-size: 1rem;
         }
         
-        /* Stats */
+        /* Stats - Humanized Numbers */
         .stats {
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+        
+        .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 2rem;
-            margin: 4rem 0;
+            max-width: 1000px;
+            margin: 3rem auto;
         }
         
         .stat-item {
-            text-align: center;
-            padding: 2.5rem 2rem;
+            padding: 2rem;
         }
         
         .stat-number {
-            font-size: 3.5rem;
-            font-weight: 800;
-            background: linear-gradient(90deg, var(--chrome-primary), var(--chrome-secondary));
+            font-size: 3rem;
+            font-weight: 700;
+            background: var(--accent-primary);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
             display: block;
             line-height: 1;
             margin-bottom: 0.5rem;
+            transition: var(--transition-smooth);
+        }
+        
+        .stat-item:hover .stat-number {
+            transform: scale(1.1);
         }
         
         .stat-label {
@@ -408,59 +421,52 @@
             text-transform: uppercase;
         }
         
-        /* Download Section */
+        /* Download Section - Friendly Call to Action */
         .download {
-            background: linear-gradient(135deg, rgba(10,10,10,0.9), rgba(0,0,0,0.95));
-            position: relative;
-            overflow: hidden;
+            padding: 6rem 2rem;
+            text-align: center;
         }
         
-        .download::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: 
-                radial-gradient(circle at 10% 20%, rgba(255,255,255,0.03) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(255,255,255,0.02) 0%, transparent 40%);
-            pointer-events: none;
+        .download-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            max-width: 500px;
+            margin: 0 auto 3rem;
+            line-height: 1.8;
         }
         
         .download-options {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            display: flex;
             gap: 2rem;
-            margin-top: 3rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            max-width: 800px;
+            margin: 0 auto;
         }
         
         .download-card {
             padding: 2.5rem;
-            border-radius: var(--radius);
+            width: 300px;
             text-decoration: none;
-            color: var(--text-primary);
-            transition: var(--transition);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .download-card.chrome-border:hover {
-            transform: translateY(-5px) scale(1.02);
-            box-shadow: var(--glow-strong);
+            color: inherit;
+            text-align: center;
         }
         
         .download-icon {
-            font-size: 2.5rem;
+            font-size: 3rem;
             margin-bottom: 1.5rem;
-            color: var(--chrome-primary);
-            opacity: 0.9;
+            display: block;
+            transition: var(--transition-bouncy);
+        }
+        
+        .download-card:hover .download-icon {
+            transform: translateY(-8px);
         }
         
         .download-card h3 {
             font-size: 1.4rem;
             margin-bottom: 1rem;
-            color: var(--chrome-primary);
+            color: var(--text-primary);
             font-weight: 600;
         }
         
@@ -470,91 +476,87 @@
             font-size: 0.95rem;
         }
         
-        /* Footer */
+        /* Footer - Human Connection */
         .footer {
-            background: var(--bg-dark);
             padding: 4rem 2rem 3rem;
-            border-top: 1px solid var(--border-chrome);
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 4rem;
         }
         
         .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 3rem;
-            margin-bottom: 3rem;
+            max-width: 800px;
+            margin: 0 auto 3rem;
         }
         
         .footer-logo {
-            font-size: 1.8rem;
+            font-size: 2rem;
             font-weight: 700;
-            background: linear-gradient(90deg, var(--chrome-primary), var(--chrome-secondary));
+            background: var(--accent-primary);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
+            display: inline-block;
         }
         
         .footer-tagline {
             color: var(--text-secondary);
-            font-size: 0.9rem;
-            margin-bottom: 1.5rem;
-            line-height: 1.6;
+            font-size: 1rem;
+            margin-bottom: 2rem;
+            line-height: 1.8;
         }
         
         .footer-links {
             display: flex;
-            flex-direction: column;
-            gap: 0.8rem;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
         }
         
         .footer-links a {
             color: var(--text-secondary);
             text-decoration: none;
             font-size: 0.9rem;
-            transition: var(--transition);
+            transition: var(--transition-smooth);
         }
         
         .footer-links a:hover {
-            color: var(--chrome-primary);
-            transform: translateX(5px);
+            color: var(--text-primary);
+            transform: translateY(-2px);
         }
         
         .footer-bottom {
-            text-align: center;
-            padding-top: 3rem;
-            border-top: 1px solid var(--border-chrome);
-            color: var(--text-muted);
+            color: var(--text-tertiary);
             font-size: 0.85rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
         }
         
-        .footer-bottom p {
-            margin-bottom: 0.5rem;
-        }
-        
-        /* Back to Top */
+        /* Back to Top - Playful */
         .back-to-top {
             position: fixed;
             bottom: 2rem;
             right: 2rem;
             width: 50px;
             height: 50px;
-            background: var(--chrome-primary);
+            background: var(--glass-card);
+            backdrop-filter: blur(var(--blur-amount));
+            border: 1px solid var(--glass-border);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             text-decoration: none;
-            color: var(--bg-black);
+            color: var(--text-primary);
             font-size: 1.2rem;
-            font-weight: bold;
             opacity: 0;
             visibility: hidden;
             transform: translateY(20px);
-            transition: var(--transition);
+            transition: var(--transition-bouncy);
             z-index: 999;
-            box-shadow: var(--glow);
+            box-shadow: var(--glass-shadow);
         }
         
         .back-to-top.visible {
@@ -565,204 +567,243 @@
         
         .back-to-top:hover {
             transform: translateY(-5px) scale(1.1);
-            box-shadow: var(--glow-strong);
+            border-color: var(--glass-highlight);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
         }
         
-        /* Responsive */
+        /* Responsive Design */
         @media (max-width: 768px) {
-            .hero-title { font-size: 2.8rem; }
+            .hero-title { font-size: 2.5rem; }
             .section-title { font-size: 2rem; }
-            .nav-links { display: none; }
+            .navbar { width: 95%; padding: 0.8rem 1.5rem; }
+            .nav-links { gap: 1rem; }
             .features-grid { grid-template-columns: 1fr; }
-            .stats { grid-template-columns: repeat(2, 1fr); }
-            .download-options { grid-template-columns: 1fr; }
-            section { padding: 4rem 1.5rem; }
-            .feature-card, .download-card { padding: 2rem; }
+            .download-options { flex-direction: column; align-items: center; }
+            .download-card { width: 100%; max-width: 400px; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
         }
         
         @media (max-width: 480px) {
-            .hero-title { font-size: 2.2rem; }
+            .hero-title { font-size: 2rem; }
             .hero-subtitle { font-size: 1.1rem; }
             .section-title { font-size: 1.8rem; }
-            .stats { grid-template-columns: 1fr; }
-            .stat-number { font-size: 2.8rem; }
+            .stats-grid { grid-template-columns: 1fr; }
+            .nav-links { display: none; } /* Consider hamburger menu */
+            .action-buttons { flex-direction: column; align-items: center; }
+            .btn { width: 100%; max-width: 300px; justify-content: center; }
+        }
+        
+        /* Liquid Hover Effects */
+        .liquid-hover {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .liquid-hover::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1), transparent);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        .liquid-hover:hover::after {
+            width: 300px;
+            height: 300px;
         }
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <!-- Navigation -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="#home" class="logo">
-                <div class="logo-icon">OS</div>
-                <div>Osium</div>
-            </a>
+    <nav class="navbar glass-container">
+        <div class="nav-content">
+            <a href="#home" class="logo">Osium</a>
             <div class="nav-links">
                 <a href="#home" class="active">Home</a>
-                <a href="#features">Technology</a>
-                <a href="#stats">Metrics</a>
-                <a href="#download">Download</a>
+                <a href="#features">How it Works</a>
+                <a href="#stats">Results</a>
+                <a href="#download">Get It</a>
             </div>
         </div>
     </nav>
     
     <!-- Back to Top -->
-    <a href="#home" class="back-to-top" id="back-to-top">
+    <a href="#home" class="back-to-top glass-container" id="back-to-top">
         ↑
     </a>
     
-    <!-- Home Section -->
+    <!-- Hero Section -->
     <section id="home" class="hero">
         <div class="hero-content">
-            <h1 class="hero-title">Osium Texture Optimizer</h1>
-            <p class="hero-subtitle">Advanced GPU-level texture optimization for Minecraft. Maximize performance, minimize overhead.</p>
-            <div class="tagline">Next-generation rendering optimization</div>
-            <div class="buttons">
-                <a href="#download" class="btn chrome-border" style="padding: 1rem 2rem; text-decoration: none; color: var(--chrome-primary); display: inline-block; margin: 0 1rem;">
-                    Download
+            <div class="hero-badge">✨ Made for Gamers, by Gamers</div>
+            
+            <h1 class="hero-title">Buttery Smooth Minecraft</h1>
+            
+            <p class="hero-subtitle">
+                Tired of choppy frames? Osium makes Minecraft feel like liquid glass. 
+                We optimize textures at the GPU level so you can focus on what matters—playing.
+            </p>
+            
+            <div class="human-message">
+                "I built this because I was frustrated with performance issues. 
+                Now I want to share that smooth experience with everyone."
+            </div>
+            
+            <div class="action-buttons">
+                <a href="#download" class="btn btn-primary glass-container">
+                    <span>🎮</span> Try It Free
                 </a>
-                <a href="#features" class="btn" style="padding: 1rem 2rem; text-decoration: none; color: var(--text-secondary); border: 1px solid var(--border-chrome); display: inline-block; margin: 0 1rem;">
-                    Learn More
+                <a href="#features" class="btn btn-secondary glass-container">
+                    <span>🔍</span> See How It Works
                 </a>
             </div>
-        </div>
-        <div class="scroll-indicator">
-            <div class="scroll-line"></div>
-            Scroll
         </div>
     </section>
     
     <!-- Features Section -->
-    <section id="features">
-        <div class="section-container">
-            <h2 class="section-title">Core Technology</h2>
-            <p class="section-subtitle">Advanced optimization algorithms designed for modern hardware and rendering pipelines.</p>
+    <section id="features" class="features">
+        <div class="section-header">
+            <h2 class="section-title">Smart Optimization</h2>
+            <p class="section-subtitle">
+                We don't just boost FPS—we make the game feel fundamentally better.
+            </p>
+        </div>
+        
+        <div class="features-grid">
+            <div class="feature-card glass-container liquid-hover">
+                <div class="feature-icon">🤝</div>
+                <h3>Plays Well With Others</h3>
+                <p>Works alongside your favorite mods. No conflicts, just pure harmony between your setup and performance.</p>
+            </div>
             
-            <div class="features-grid">
-                <div class="feature-card chrome-border">
-                    <div class="feature-icon">⚡</div>
-                    <h3>GPU-Accelerated Optimization</h3>
-                    <p>Leverages modern GPU capabilities for real-time texture processing and rendering optimization.</p>
-                </div>
-                
-                <div class="feature-card chrome-border">
-                    <div class="feature-icon">🌀</div>
-                    <h3>Intelligent Texture Streaming</h3>
-                    <p>Dynamic texture loading and caching system that adapts to your hardware capabilities.</p>
-                </div>
-                
-                <div class="feature-card chrome-border">
-                    <div class="feature-icon">🔌</div>
-                    <h3>Zero-Overhead Integration</h3>
-                    <p>Seamless compatibility with modern mod loaders and rendering engines.</p>
-                </div>
-                
-                <div class="feature-card chrome-border">
-                    <div class="feature-icon">📊</div>
-                    <h3>Real-time Performance Analytics</h3>
-                    <p>Advanced monitoring and optimization suggestions based on your system performance.</p>
-                </div>
-                
-                <div class="feature-card chrome-border">
-                    <div class="feature-icon">🤖</div>
-                    <h3>Automated Configuration</h3>
-                    <p>Self-optimizing settings that adapt to your gameplay patterns and system specifications.</p>
-                </div>
-                
-                <div class="feature-card chrome-border">
-                    <div class="feature-icon">🚀</div>
-                    <h3>Future-Proof Architecture</h3>
-                    <p>Designed for next-generation Minecraft rendering and upcoming GPU technologies.</p>
-                </div>
+            <div class="feature-card glass-container liquid-hover">
+                <div class="feature-icon">🎯</div>
+                <h3>Zero Configuration</h3>
+                <p>Just install and play. We automatically tune settings based on your hardware. No PhD required.</p>
+            </div>
+            
+            <div class="feature-card glass-container liquid-hover">
+                <div class="feature-icon">🔋</div>
+                <h3>Battery Friendly</h3>
+                <p>Optimized for laptops too. Get better performance without draining your battery or cooking your hardware.</p>
+            </div>
+            
+            <div class="feature-card glass-container liquid-hover">
+                <div class="feature-icon">📈</div>
+                <h3>Grows With You</h3>
+                <p>As Minecraft evolves, so do we. Continuous updates mean you're always getting the best experience.</p>
+            </div>
+            
+            <div class="feature-card glass-container liquid-hover">
+                <div class="feature-icon">💬</div>
+                <h3>Community Driven</h3>
+                <p>Features are shaped by real player feedback. This isn't our project—it's our community's project.</p>
+            </div>
+            
+            <div class="feature-card glass-container liquid-hover">
+                <div class="feature-icon">✨</div>
+                <h3>Future Ready</h3>
+                <p>Built with tomorrow's technology in mind. When Minecraft gets upgrades, you'll be ready.</p>
             </div>
         </div>
     </section>
     
     <!-- Stats Section -->
-    <section id="stats" style="background: rgba(255,255,255,0.02);">
-        <div class="section-container">
-            <h2 class="section-title">Performance Metrics</h2>
-            <div class="stats">
-                <div class="stat-item chrome-border">
-                    <span class="stat-number" data-count="87">0</span>
-                    <span class="stat-label">Avg. Performance Gain</span>
-                </div>
-                <div class="stat-item chrome-border">
-                    <span class="stat-number" data-count="94">0</span>
-                    <span class="stat-label">Texture Efficiency</span>
-                </div>
-                <div class="stat-item chrome-border">
-                    <span class="stat-number" data-count="0">0</span>
-                    <span class="stat-label">Added Latency</span>
-                </div>
-                <div class="stat-item chrome-border">
-                    <span class="stat-number">∞</span>
-                    <span class="stat-label">Scalability</span>
-                </div>
+    <section id="stats" class="stats">
+        <div class="section-header">
+            <h2 class="section-title">Real Results</h2>
+            <p class="section-subtitle">
+                Numbers don't lie. Here's what players are experiencing:
+            </p>
+        </div>
+        
+        <div class="stats-grid">
+            <div class="stat-item glass-container">
+                <span class="stat-number" data-count="87">0</span>
+                <span class="stat-label">Average FPS Boost</span>
+            </div>
+            
+            <div class="stat-item glass-container">
+                <span class="stat-number" data-count="94">0</span>
+                <span class="stat-label">Texture Efficiency</span>
+            </div>
+            
+            <div class="stat-item glass-container">
+                <span class="stat-number" data-count="0">0</span>
+                <span class="stat-label">Added Latency</span>
+            </div>
+            
+            <div class="stat-item glass-container">
+                <span class="stat-number">∞</span>
+                <span class="stat-label">Player Smiles</span>
             </div>
         </div>
     </section>
     
     <!-- Download Section -->
     <section id="download" class="download">
-        <div class="section-container">
-            <h2 class="section-title">Availability</h2>
-            <p class="section-subtitle">Optimized for modern Minecraft ecosystems and deployment platforms.</p>
+        <div class="section-header">
+            <h2 class="section-title">Ready to Play Smooth?</h2>
+            <p class="download-subtitle">
+                Join thousands of players who've transformed their Minecraft experience.
+            </p>
+        </div>
+        
+        <div class="download-options">
+            <a href="https://modrinth.com" target="_blank" class="download-card glass-container liquid-hover">
+                <div class="download-icon">📦</div>
+                <h3>Modrinth</h3>
+                <p>The modern way to get mods. Clean, fast, and always up-to-date.</p>
+            </a>
             
-            <div class="download-options">
-                <a href="https://modrinth.com" target="_blank" class="download-card chrome-border">
-                    <div class="download-icon">📦</div>
-                    <h3>Modrinth</h3>
-                    <p>Primary distribution platform with automated updates and version management.</p>
-                </a>
-                
-                <a href="#" class="download-card chrome-border">
-                    <div class="download-icon">🌐</div>
-                    <h3>Official Site</h3>
-                    <p>Direct downloads, documentation, and advanced configuration options.</p>
-                </a>
-            </div>
+            <a href="#" class="download-card glass-container liquid-hover">
+                <div class="download-icon">💻</div>
+                <h3>Direct Download</h3>
+                <p>Get the latest version straight from our servers. Simple and reliable.</p>
+            </a>
+        </div>
+        
+        <div class="human-message" style="margin-top: 4rem; max-width: 600px;">
+            "Seriously, just try it. If you don't feel the difference, I'll be surprised. 
+            This is the optimization I wish I had years ago."
         </div>
     </section>
     
     <!-- Footer -->
     <footer class="footer">
         <div class="footer-content">
-            <div>
-                <div class="footer-logo">Osium</div>
-                <p class="footer-tagline">Redefining Minecraft performance through advanced GPU optimization and intelligent resource management.</p>
-            </div>
+            <div class="footer-logo">Osium</div>
+            <p class="footer-tagline">
+                Making Minecraft better, one frame at a time. 
+                Because smooth gameplay shouldn't be a luxury—it should be standard.
+            </p>
             
-            <div>
-                <h4 style="color: var(--chrome-primary); margin-bottom: 1.5rem; font-size: 1rem;">Navigation</h4>
-                <div class="footer-links">
-                    <a href="#home">Home</a>
-                    <a href="#features">Technology</a>
-                    <a href="#stats">Metrics</a>
-                    <a href="#download">Download</a>
-                </div>
-            </div>
-            
-            <div>
-                <h4 style="color: var(--chrome-primary); margin-bottom: 1.5rem; font-size: 1rem;">Information</h4>
-                <div class="footer-links">
-                    <a href="#">Documentation</a>
-                    <a href="#">GitHub</a>
-                    <a href="#">Support</a>
-                    <a href="#">Privacy</a>
-                </div>
+            <div class="footer-links">
+                <a href="#home">Home</a>
+                <a href="#features">How It Works</a>
+                <a href="#download">Download</a>
+                <a href="#">Community</a>
+                <a href="#">Support</a>
+                <a href="#">GitHub</a>
             </div>
         </div>
         
         <div class="footer-bottom">
-            <p>© 2025 Osium Mod</p>
-            <p>Osium is an independent optimization project. Minecraft is a trademark of Mojang Studios.</p>
+            <p>© 2025 Osium. Made with care for the Minecraft community.</p>
+            <p style="margin-top: 0.5rem; opacity: 0.7;">
+                Not affiliated with Mojang. Minecraft is a trademark of Mojang Studios.
+            </p>
         </div>
     </footer>
     
     <script>
-        // Smooth scrolling for all anchor links
+        // Gentle Smooth Scrolling
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
                 e.preventDefault();
@@ -778,16 +819,16 @@
                     });
                     this.classList.add('active');
                     
-                    // Smooth scroll to target
+                    // Gentle scroll with easing
                     window.scrollTo({
-                        top: targetElement.offsetTop - 80,
+                        top: targetElement.offsetTop - 100,
                         behavior: 'smooth'
                     });
                 }
             });
         });
         
-        // Update active nav link on scroll
+        // Update active nav on scroll
         const sections = document.querySelectorAll('section');
         const navLinks = document.querySelectorAll('.nav-links a');
         
@@ -797,7 +838,7 @@
             sections.forEach(section => {
                 const sectionTop = section.offsetTop;
                 const sectionHeight = section.clientHeight;
-                if (scrollY >= (sectionTop - 100)) {
+                if (scrollY >= (sectionTop - 150)) {
                     current = section.getAttribute('id');
                 }
             });
@@ -810,17 +851,17 @@
             });
         });
         
-        // Back to top button
+        // Playful Back to Top Button
         const backToTop = document.getElementById('back-to-top');
         window.addEventListener('scroll', () => {
-            if (window.scrollY > 300) {
+            if (window.scrollY > 500) {
                 backToTop.classList.add('visible');
             } else {
                 backToTop.classList.remove('visible');
             }
         });
         
-        // Animate stats on scroll
+        // Animate stats with personality
         const statNumbers = document.querySelectorAll('.stat-number');
         const statsSection = document.getElementById('stats');
         
@@ -832,7 +873,7 @@
                         if (!target) return; // Skip infinity symbol
                         
                         const targetNum = parseInt(target);
-                        const duration = 2000;
+                        const duration = 1800;
                         const step = targetNum / (duration / 16);
                         let current = 0;
                         
@@ -841,6 +882,12 @@
                             if (current >= targetNum) {
                                 stat.textContent = target + (stat.textContent.includes('%') ? '%' : '');
                                 clearInterval(timer);
+                                
+                                // Little celebration wiggle
+                                stat.style.transform = 'scale(1.1)';
+                                setTimeout(() => {
+                                    stat.style.transform = 'scale(1)';
+                                }, 300);
                             } else {
                                 stat.textContent = Math.floor(current) + (stat.textContent.includes('%') ? '%' : '');
                             }
@@ -850,12 +897,24 @@
                     observer.unobserve(entry.target);
                 }
             });
-        }, { threshold: 0.5 });
+        }, { threshold: 0.3 });
         
         if (statsSection) observer.observe(statsSection);
         
-        // Initialize
-        console.log('Osium 2025 - Clean Black & Chrome Edition 🚀');
+        // Liquid hover effect enhancement
+        document.querySelectorAll('.liquid-hover').forEach(element => {
+            element.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-6px)';
+            });
+            
+            element.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+        
+        // Gentle console welcome
+        console.log('%c✨ Welcome to Osium ✨', 'background: linear-gradient(135deg, #8A8AFF, #FF8A8A); color: white; padding: 10px 20px; border-radius: 10px; font-size: 14px;');
+        console.log('Hope you enjoy the buttery smooth experience! 🎮');
     </script>
 </body>
 </html>
