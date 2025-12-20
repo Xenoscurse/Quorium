@@ -4,43 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Osium - Minecraft Texture Optimizer</title>
-    <meta name="description" content="Make Minecraft buttery smooth. Advanced texture optimization for gamers who care about performance.">
+    <meta name="description" content="Transform Minecraft with liquid-smooth performance. Advanced GPU-level texture optimization.">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22 fill=%22%23ffffff%22>✨</text></svg>">
     <style>
-        /* LIQUID GLASS THEME - iOS 26 Inspired */
+        /* LIQUID GLASS iOS 26 STYLE */
         :root {
-            /* Glass Morphism Colors */
+            /* Glass Morphism */
             --glass-bg: rgba(10, 10, 20, 0.7);
             --glass-card: rgba(255, 255, 255, 0.08);
             --glass-border: rgba(255, 255, 255, 0.15);
             --glass-highlight: rgba(255, 255, 255, 0.2);
             
-            /* Accent Colors - Gentle gradients */
+            /* Gradient Accents */
             --accent-primary: linear-gradient(135deg, #8A8AFF 0%, #6C6CFF 100%);
             --accent-secondary: linear-gradient(135deg, #FF8A8A 0%, #FF6C6C 100%);
-            --accent-glow: radial-gradient(circle at center, rgba(138, 138, 255, 0.3), transparent 70%);
             
-            /* Text Colors - Soft and readable */
+            /* Text Colors */
             --text-primary: rgba(255, 255, 255, 0.95);
             --text-secondary: rgba(255, 255, 255, 0.7);
             --text-tertiary: rgba(255, 255, 255, 0.5);
             
-            /* Background Layers */
+            /* Background */
             --bg-base: #000010;
             --bg-gradient: radial-gradient(circle at 20% 50%, #1A1A2E 0%, #000010 100%);
             
-            /* Liquid Effects */
+            /* Effects */
             --blur-amount: 20px;
             --transition-smooth: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
-            --transition-bouncy: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-            
-            /* Glass Properties */
             --glass-radius: 24px;
             --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            --glass-inset: inset 0 1px 0 rgba(255, 255, 255, 0.1);
         }
         
-        /* Reset with personality */
         * {
             margin: 0;
             padding: 0;
@@ -49,7 +43,7 @@
         }
         
         body {
-            font-family: -apple-system, 'SF Pro Display', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: -apple-system, 'SF Pro Display', system-ui, sans-serif;
             background: var(--bg-base);
             background-image: var(--bg-gradient);
             color: var(--text-primary);
@@ -58,11 +52,10 @@
             overflow-x: hidden;
             font-weight: 400;
             -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
             scroll-behavior: smooth;
         }
         
-        /* Liquid Glass Background */
+        /* Liquid Background */
         body::before {
             content: '';
             position: fixed;
@@ -92,7 +85,7 @@
             -webkit-backdrop-filter: blur(var(--blur-amount));
             border: 1px solid var(--glass-border);
             border-radius: var(--glass-radius);
-            box-shadow: var(--glass-shadow), var(--glass-inset);
+            box-shadow: var(--glass-shadow);
             transition: var(--transition-smooth);
             position: relative;
             overflow: hidden;
@@ -111,10 +104,10 @@
         .glass-container:hover {
             transform: translateY(-4px);
             border-color: rgba(255, 255, 255, 0.25);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4), var(--glass-inset);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
         }
         
-        /* Navigation - Floating Glass Bar */
+        /* Fixed Top Navigation */
         .navbar {
             position: fixed;
             top: 20px;
@@ -189,7 +182,7 @@
             width: 20px;
         }
         
-        /* Hero Section - Human Centered */
+        /* Hero Section */
         .hero {
             min-height: 100vh;
             display: flex;
@@ -204,30 +197,6 @@
             max-width: 800px;
             position: relative;
             z-index: 1;
-        }
-        
-        .hero-badge {
-            display: inline-block;
-            padding: 0.8rem 1.5rem;
-            margin-bottom: 2rem;
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            letter-spacing: 1px;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .hero-badge::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 50px;
-            backdrop-filter: blur(10px);
-            z-index: -1;
         }
         
         .hero-title {
@@ -252,23 +221,7 @@
             margin-right: auto;
         }
         
-        /* Human Touch - Personal Message */
-        .human-message {
-            font-size: 1.1rem;
-            color: var(--text-tertiary);
-            font-style: italic;
-            margin: 2rem 0;
-            padding: 1.5rem;
-            border-left: 3px solid;
-            border-image: var(--accent-primary);
-            border-image-slice: 1;
-            text-align: left;
-            max-width: 500px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        
-        /* Action Buttons - Playful & Responsive */
+        /* Action Buttons */
         .action-buttons {
             display: flex;
             gap: 1rem;
@@ -283,7 +236,7 @@
             text-decoration: none;
             font-weight: 600;
             font-size: 1rem;
-            transition: var(--transition-bouncy);
+            transition: var(--transition-smooth);
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
@@ -315,7 +268,7 @@
             border-color: rgba(255, 255, 255, 0.3);
         }
         
-        /* Features Section - Conversational */
+        /* Features */
         .features {
             padding: 6rem 2rem;
         }
@@ -359,7 +312,7 @@
             font-size: 2.5rem;
             margin-bottom: 1.5rem;
             display: inline-block;
-            transition: var(--transition-bouncy);
+            transition: var(--transition-smooth);
         }
         
         .feature-card:hover .feature-icon {
@@ -379,7 +332,7 @@
             font-size: 1rem;
         }
         
-        /* Stats - Humanized Numbers */
+        /* Stats */
         .stats {
             padding: 4rem 2rem;
             text-align: center;
@@ -421,18 +374,10 @@
             text-transform: uppercase;
         }
         
-        /* Download Section - Friendly Call to Action */
+        /* Download */
         .download {
             padding: 6rem 2rem;
             text-align: center;
-        }
-        
-        .download-subtitle {
-            color: var(--text-secondary);
-            font-size: 1.1rem;
-            max-width: 500px;
-            margin: 0 auto 3rem;
-            line-height: 1.8;
         }
         
         .download-options {
@@ -441,7 +386,7 @@
             justify-content: center;
             flex-wrap: wrap;
             max-width: 800px;
-            margin: 0 auto;
+            margin: 3rem auto;
         }
         
         .download-card {
@@ -456,7 +401,7 @@
             font-size: 3rem;
             margin-bottom: 1.5rem;
             display: block;
-            transition: var(--transition-bouncy);
+            transition: var(--transition-smooth);
         }
         
         .download-card:hover .download-icon {
@@ -476,7 +421,7 @@
             font-size: 0.95rem;
         }
         
-        /* Footer - Human Connection */
+        /* Footer */
         .footer {
             padding: 4rem 2rem 3rem;
             text-align: center;
@@ -498,13 +443,6 @@
             color: transparent;
             margin-bottom: 1.5rem;
             display: inline-block;
-        }
-        
-        .footer-tagline {
-            color: var(--text-secondary);
-            font-size: 1rem;
-            margin-bottom: 2rem;
-            line-height: 1.8;
         }
         
         .footer-links {
@@ -534,7 +472,7 @@
             border-top: 1px solid rgba(255, 255, 255, 0.05);
         }
         
-        /* Back to Top - Playful */
+        /* Back to Top */
         .back-to-top {
             position: fixed;
             bottom: 2rem;
@@ -554,7 +492,7 @@
             opacity: 0;
             visibility: hidden;
             transform: translateY(20px);
-            transition: var(--transition-bouncy);
+            transition: var(--transition-smooth);
             z-index: 999;
             box-shadow: var(--glass-shadow);
         }
@@ -571,7 +509,7 @@
             box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
         }
         
-        /* Responsive Design */
+        /* Responsive */
         @media (max-width: 768px) {
             .hero-title { font-size: 2.5rem; }
             .section-title { font-size: 2rem; }
@@ -581,6 +519,8 @@
             .download-options { flex-direction: column; align-items: center; }
             .download-card { width: 100%; max-width: 400px; }
             .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .action-buttons { flex-direction: column; align-items: center; }
+            .btn { width: 100%; max-width: 300px; justify-content: center; }
         }
         
         @media (max-width: 480px) {
@@ -588,33 +528,30 @@
             .hero-subtitle { font-size: 1.1rem; }
             .section-title { font-size: 1.8rem; }
             .stats-grid { grid-template-columns: 1fr; }
-            .nav-links { display: none; } /* Consider hamburger menu */
-            .action-buttons { flex-direction: column; align-items: center; }
-            .btn { width: 100%; max-width: 300px; justify-content: center; }
+            .nav-links { font-size: 0.8rem; gap: 0.5rem; }
         }
         
-        /* Liquid Hover Effects */
-        .liquid-hover {
+        /* Active Section Highlighter */
+        .section-highlight {
             position: relative;
-            overflow: hidden;
         }
         
-        .liquid-hover::after {
+        .section-highlight::before {
             content: '';
             position: absolute;
+            left: -10px;
             top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.1), transparent);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 20px;
+            background: var(--accent-primary);
+            border-radius: 2px;
+            opacity: 0;
+            transition: var(--transition-smooth);
         }
         
-        .liquid-hover:hover::after {
-            width: 300px;
-            height: 300px;
+        .section-highlight.active::before {
+            opacity: 1;
         }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -626,9 +563,9 @@
             <a href="#home" class="logo">Osium</a>
             <div class="nav-links">
                 <a href="#home" class="active">Home</a>
-                <a href="#features">How it Works</a>
-                <a href="#stats">Results</a>
-                <a href="#download">Get It</a>
+                <a href="#features">Features</a>
+                <a href="#stats">Performance</a>
+                <a href="#download">Download</a>
             </div>
         </div>
     </nav>
@@ -641,85 +578,78 @@
     <!-- Hero Section -->
     <section id="home" class="hero">
         <div class="hero-content">
-            <div class="hero-badge">✨ Made for Gamers, by Gamers</div>
-            
             <h1 class="hero-title">Buttery Smooth Minecraft</h1>
             
             <p class="hero-subtitle">
-                Tired of choppy frames? Osium makes Minecraft feel like liquid glass. 
-                We optimize textures at the GPU level so you can focus on what matters—playing.
+                Transform choppy gameplay into liquid-smooth performance with advanced GPU-level texture optimization. 
+                Experience Minecraft like never before.
             </p>
-            
-            <div class="human-message">
-                "I built this because I was frustrated with performance issues. 
-                Now I want to share that smooth experience with everyone."
-            </div>
             
             <div class="action-buttons">
                 <a href="#download" class="btn btn-primary glass-container">
-                    <span>🎮</span> Try It Free
+                    <span>📥</span> Download
                 </a>
                 <a href="#features" class="btn btn-secondary glass-container">
-                    <span>🔍</span> See How It Works
+                    <span>✨</span> Learn More
                 </a>
             </div>
         </div>
     </section>
     
-    <!-- Features Section -->
+    <!-- Features -->
     <section id="features" class="features">
         <div class="section-header">
-            <h2 class="section-title">Smart Optimization</h2>
+            <h2 class="section-title">Advanced Optimization</h2>
             <p class="section-subtitle">
-                We don't just boost FPS—we make the game feel fundamentally better.
+                Smart technology that makes Minecraft feel fundamentally better.
             </p>
         </div>
         
         <div class="features-grid">
-            <div class="feature-card glass-container liquid-hover">
-                <div class="feature-icon">🤝</div>
-                <h3>Plays Well With Others</h3>
-                <p>Works alongside your favorite mods. No conflicts, just pure harmony between your setup and performance.</p>
+            <div class="feature-card glass-container">
+                <div class="feature-icon">⚡</div>
+                <h3>GPU Acceleration</h3>
+                <p>Leverages modern GPU capabilities for real-time texture processing and zero-overhead optimization.</p>
             </div>
             
-            <div class="feature-card glass-container liquid-hover">
-                <div class="feature-icon">🎯</div>
-                <h3>Zero Configuration</h3>
-                <p>Just install and play. We automatically tune settings based on your hardware. No PhD required.</p>
+            <div class="feature-card glass-container">
+                <div class="feature-icon">🌀</div>
+                <h3>Intelligent Streaming</h3>
+                <p>Dynamic texture loading system that adapts to your hardware and gameplay patterns.</p>
             </div>
             
-            <div class="feature-card glass-container liquid-hover">
-                <div class="feature-icon">🔋</div>
-                <h3>Battery Friendly</h3>
-                <p>Optimized for laptops too. Get better performance without draining your battery or cooking your hardware.</p>
+            <div class="feature-card glass-container">
+                <div class="feature-icon">🔌</div>
+                <h3>Full Compatibility</h3>
+                <p>Works seamlessly with Fabric, Sodium, Iris, and all your favorite mods.</p>
             </div>
             
-            <div class="feature-card glass-container liquid-hover">
-                <div class="feature-icon">📈</div>
-                <h3>Grows With You</h3>
-                <p>As Minecraft evolves, so do we. Continuous updates mean you're always getting the best experience.</p>
+            <div class="feature-card glass-container">
+                <div class="feature-icon">📊</div>
+                <h3>Real-time Analytics</h3>
+                <p>Advanced performance monitoring with actionable insights for optimal gameplay.</p>
             </div>
             
-            <div class="feature-card glass-container liquid-hover">
-                <div class="feature-icon">💬</div>
-                <h3>Community Driven</h3>
-                <p>Features are shaped by real player feedback. This isn't our project—it's our community's project.</p>
+            <div class="feature-card glass-container">
+                <div class="feature-icon">🤖</div>
+                <h3>Auto Configuration</h3>
+                <p>Self-optimizing settings that adapt to your system specifications automatically.</p>
             </div>
             
-            <div class="feature-card glass-container liquid-hover">
-                <div class="feature-icon">✨</div>
+            <div class="feature-card glass-container">
+                <div class="feature-icon">🚀</div>
                 <h3>Future Ready</h3>
-                <p>Built with tomorrow's technology in mind. When Minecraft gets upgrades, you'll be ready.</p>
+                <p>Built for next-generation Minecraft rendering and upcoming GPU technologies.</p>
             </div>
         </div>
     </section>
     
-    <!-- Stats Section -->
+    <!-- Stats -->
     <section id="stats" class="stats">
         <div class="section-header">
-            <h2 class="section-title">Real Results</h2>
+            <h2 class="section-title">Performance Metrics</h2>
             <p class="section-subtitle">
-                Numbers don't lie. Here's what players are experiencing:
+                Real results from actual gameplay sessions.
             </p>
         </div>
         
@@ -741,37 +671,32 @@
             
             <div class="stat-item glass-container">
                 <span class="stat-number">∞</span>
-                <span class="stat-label">Player Smiles</span>
+                <span class="stat-label">Player Satisfaction</span>
             </div>
         </div>
     </section>
     
-    <!-- Download Section -->
+    <!-- Download -->
     <section id="download" class="download">
         <div class="section-header">
-            <h2 class="section-title">Ready to Play Smooth?</h2>
-            <p class="download-subtitle">
+            <h2 class="section-title">Ready to Experience Smooth?</h2>
+            <p class="section-subtitle">
                 Join thousands of players who've transformed their Minecraft experience.
             </p>
         </div>
         
         <div class="download-options">
-            <a href="https://modrinth.com" target="_blank" class="download-card glass-container liquid-hover">
+            <a href="https://modrinth.com" target="_blank" class="download-card glass-container">
                 <div class="download-icon">📦</div>
                 <h3>Modrinth</h3>
-                <p>The modern way to get mods. Clean, fast, and always up-to-date.</p>
+                <p>Modern distribution platform with automated updates and version management.</p>
             </a>
             
-            <a href="#" class="download-card glass-container liquid-hover">
+            <a href="#" class="download-card glass-container">
                 <div class="download-icon">💻</div>
                 <h3>Direct Download</h3>
                 <p>Get the latest version straight from our servers. Simple and reliable.</p>
             </a>
-        </div>
-        
-        <div class="human-message" style="margin-top: 4rem; max-width: 600px;">
-            "Seriously, just try it. If you don't feel the difference, I'll be surprised. 
-            This is the optimization I wish I had years ago."
         </div>
     </section>
     
@@ -779,23 +704,19 @@
     <footer class="footer">
         <div class="footer-content">
             <div class="footer-logo">Osium</div>
-            <p class="footer-tagline">
-                Making Minecraft better, one frame at a time. 
-                Because smooth gameplay shouldn't be a luxury—it should be standard.
-            </p>
             
             <div class="footer-links">
                 <a href="#home">Home</a>
-                <a href="#features">How It Works</a>
+                <a href="#features">Features</a>
+                <a href="#stats">Performance</a>
                 <a href="#download">Download</a>
-                <a href="#">Community</a>
-                <a href="#">Support</a>
                 <a href="#">GitHub</a>
+                <a href="#">Support</a>
             </div>
         </div>
         
         <div class="footer-bottom">
-            <p>© 2025 Osium. Made with care for the Minecraft community.</p>
+            <p>© 2025 Osium. Made for the Minecraft community.</p>
             <p style="margin-top: 0.5rem; opacity: 0.7;">
                 Not affiliated with Mojang. Minecraft is a trademark of Mojang Studios.
             </p>
@@ -803,7 +724,7 @@
     </footer>
     
     <script>
-        // Gentle Smooth Scrolling
+        // Smooth scrolling with section highlighting
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
                 e.preventDefault();
@@ -819,7 +740,7 @@
                     });
                     this.classList.add('active');
                     
-                    // Gentle scroll with easing
+                    // Smooth scroll
                     window.scrollTo({
                         top: targetElement.offsetTop - 100,
                         behavior: 'smooth'
@@ -828,17 +749,18 @@
             });
         });
         
-        // Update active nav on scroll
+        // Update active nav on scroll with better detection
         const sections = document.querySelectorAll('section');
         const navLinks = document.querySelectorAll('.nav-links a');
         
-        window.addEventListener('scroll', () => {
+        function updateActiveNav() {
             let current = '';
+            const scrollPosition = window.scrollY + 100;
             
             sections.forEach(section => {
                 const sectionTop = section.offsetTop;
                 const sectionHeight = section.clientHeight;
-                if (scrollY >= (sectionTop - 150)) {
+                if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
                     current = section.getAttribute('id');
                 }
             });
@@ -849,9 +771,11 @@
                     link.classList.add('active');
                 }
             });
-        });
+        }
         
-        // Playful Back to Top Button
+        window.addEventListener('scroll', updateActiveNav);
+        
+        // Back to top button
         const backToTop = document.getElementById('back-to-top');
         window.addEventListener('scroll', () => {
             if (window.scrollY > 500) {
@@ -861,7 +785,7 @@
             }
         });
         
-        // Animate stats with personality
+        // Animate stats
         const statNumbers = document.querySelectorAll('.stat-number');
         const statsSection = document.getElementById('stats');
         
@@ -870,7 +794,7 @@
                 if (entry.isIntersecting) {
                     statNumbers.forEach(stat => {
                         const target = stat.getAttribute('data-count');
-                        if (!target) return; // Skip infinity symbol
+                        if (!target) return;
                         
                         const targetNum = parseInt(target);
                         const duration = 1800;
@@ -883,7 +807,7 @@
                                 stat.textContent = target + (stat.textContent.includes('%') ? '%' : '');
                                 clearInterval(timer);
                                 
-                                // Little celebration wiggle
+                                // Celebration animation
                                 stat.style.transform = 'scale(1.1)';
                                 setTimeout(() => {
                                     stat.style.transform = 'scale(1)';
@@ -901,20 +825,8 @@
         
         if (statsSection) observer.observe(statsSection);
         
-        // Liquid hover effect enhancement
-        document.querySelectorAll('.liquid-hover').forEach(element => {
-            element.addEventListener('mouseenter', function() {
-                this.style.transform = 'translateY(-6px)';
-            });
-            
-            element.addEventListener('mouseleave', function() {
-                this.style.transform = 'translateY(0)';
-            });
-        });
-        
-        // Gentle console welcome
-        console.log('%c✨ Welcome to Osium ✨', 'background: linear-gradient(135deg, #8A8AFF, #FF8A8A); color: white; padding: 10px 20px; border-radius: 10px; font-size: 14px;');
-        console.log('Hope you enjoy the buttery smooth experience! 🎮');
+        // Initialize
+        console.log('%c✨ Osium Liquid Glass Website ✨', 'background: linear-gradient(135deg, #8A8AFF, #FF8A8A); color: white; padding: 10px 20px; border-radius: 10px; font-size: 14px;');
     </script>
 </body>
 </html>
