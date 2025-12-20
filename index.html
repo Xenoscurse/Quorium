@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Osium - Minecraft Texture Optimizer</title>
+    <meta name="description" content="Advanced texture atlas optimizer for Minecraft. Reduce draw calls, boost FPS, enhance performance.">
+    <meta name="keywords" content="minecraft, mod, optimization, texture, fps, osium, fabric, sodium, optifine">
+    <meta property="og:title" content="Osium - Minecraft Texture Optimizer">
+    <meta property="og:description" content="Advanced texture atlas optimization for Minecraft. Reduce draw calls, boost FPS.">
+    <meta property="og:url" content="https://xenoscurse.github.io/osium/">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Osium Texture Optimizer">
+    <meta name="twitter:description" content="Boost your Minecraft FPS with advanced texture optimization">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22 fill=%22%235D7B93%22>⚙️</text></svg>">
+    <style>
+        :root {
+            --primary: #5D7B93;
+            --primary-dark: #4A6FA5;
+            --secondary: #7ba1d2;
+            --bg-dark: #0f172a;
+            --bg-card: #1e293b;
+            --text-light: #f1f5f9;
+            --text-muted: #94a3b8;
+            --success: #10b981;
+            --radius: 20px;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, var(--bg-dark) 0%, #1a2536 100%);
+            color: var(--text-light);
+            min-height: 100vh;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .logo-container {
+            animation: fadeIn 1s ease-out, float 3s ease-in-out infinite;
+            margin-bottom: 2rem;
+        }
+        .logo {
+            font-size: 5rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            background-size: 200% 200%;
+            animation: gradientShift 3s ease infinite;
+            width: 150px;
+            height: 150px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            font-weight: 800;
+            font-family: 'Courier New', monospace;
+            box-shadow: var(--shadow);
+            color: white;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+        .header {
+            text-align: center;
+            padding: 4rem 1rem;
+            animation: fadeIn 0.8s ease-out;
+        }
+        .title {
+            font-size: 3.5rem;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 1rem;
+            font-weight: 800;
+            line-height: 1.1;
+        }
+        .subtitle {
+            font-size: 1.3rem;
+            color: var(--text-muted);
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
+        .pronunciation {
+            display: inline-block;
+            background: rgba(93, 123, 147, 0.2);
+            padding: 0.6rem 1.2rem;
+            border-radius: 50px;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+            border: 2px solid var(--primary);
+            backdrop-filter: blur(10px);
+        }
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin: 3rem 0;
+            flex-wrap: wrap;
+        }
+        .stat-card {
+            text-align: center;
+            background: var(--bg-card);
+            padding: 1.5rem 2rem;
+            border-radius: var(--radius);
+            min-width: 150px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        .stat-number {
+            display: block;
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .stat-label {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+        .buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            box-shadow: 0 5px 20px rgba(93, 123, 147, 0.4);
+        }
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(93, 123, 147, 0.6);
+        }
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-light);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px);
+        }
+        .features {
+            padding: 5rem 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 40px 40px 0 0;
+            margin-top: 3rem;
+        }
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .section-subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            font-size: 1.1rem;
+        }
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .feature-card {
+            background: var(--bg-card);
+            padding: 2rem;
+            border-radius: var(--radius);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s;
+            animation: fadeIn 0.6s ease-out;
+            animation-fill-mode: both;
+        }
+        .feature-card:nth-child(1) { animation-delay: 0.1s; }
+        .feature-card:nth-child(2) { animation-delay: 0.2s; }
+        .feature-card:nth-child(3) { animation-delay: 0.3s; }
+        .feature-card:nth-child(4) { animation-delay: 0.4s; }
+        .feature-card:nth-child(5) { animation-delay: 0.5s; }
+        .feature-card:nth-child(6) { animation-delay: 0.6s; }
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow);
+            border-color: var(--primary);
+        }
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+        .feature-card h3 {
+            margin-bottom: 1rem;
+            color: var(--text-light);
+            font-size: 1.3rem;
+        }
+        .feature-card p {
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+        .code-snippet {
+            background: #0d1117;
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 3rem auto;
+            max-width: 600px;
+            border: 1px solid #30363d;
+            box-shadow: var(--shadow);
+        }
+        .code-header {
+            background: #161b22;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-bottom: 1px solid #30363d;
+        }
+        .code-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        .code-dot.red { background: #ff5f56; }
+        .code-dot.yellow { background: #ffbd2e; }
+        .code-dot.green { background: #27ca3f; }
+        .code-title {
+            margin-left: 1rem;
+            font-family: 'Courier New', monospace;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        .code-snippet pre {
+            padding: 1.5rem;
+            margin: 0;
+            overflow-x: auto;
+        }
+        .code-snippet code {
+            font-family: 'Courier New', monospace;
+            color: #c9d1d9;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        .footer {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--text-muted);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 3rem;
+        }
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .footer-links a:hover {
+            color: var(--secondary);
+        }
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            z-index: 1000;
+            transition: width 0.1s;
+        }
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--bg-card);
+            padding: 1rem 1.5rem;
+            border-radius: var(--radius);
+            border-left: 4px solid var(--primary);
+            box-shadow: var(--shadow);
+            transform: translateX(150%);
+            transition: transform 0.3s;
+            max-width: 300px;
+            z-index: 1001;
+        }
+        .notification.show {
+            transform: translateX(0);
+        }
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+        .loader {
+            width: 50px;
+            height: 50px;
+            border: 3px solid var(--text-muted);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        @media (max-width: 768px) {
+            .title { font-size: 2.5rem; }
+            .logo { width: 120px; height: 120px; font-size: 4rem; }
+            .stats { gap: 1rem; }
+            .stat-card { min-width: 120px; padding: 1rem; }
+            .stat-number { font-size: 2rem; }
+            .features-grid { grid-template-columns: 1fr; }
+            .buttons { flex-direction: column; align-items: center; }
+            .btn { width: 100%; max-width: 300px; justify-content: center; }
+            .code-snippet { margin: 2rem 1rem; }
+        }
+        @media (max-width: 480px) {
+            .title { font-size: 2rem; }
+            .logo { width: 100px; height: 100px; font-size: 3rem; }
+            .stat-card { min-width: 100px; }
+            .section-title { font-size: 2rem; }
+            .features { padding: 3rem 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="scroll-progress" id="scroll-progress"></div>
+    <div class="notification" id="notification">
+        <p>Welcome to Osium! 🚀</p>
+    </div>
+    
+    <div class="container">
+        <header class="header">
+            <div class="logo-container">
+                <div class="logo">Os</div>
+            </div>
+            
+            <h1 class="title">Osium Texture Optimizer</h1>
+            
+            <p class="subtitle">
+                Advanced texture atlas optimization for Minecraft. 
+                Reduce draw calls, boost FPS, and enhance performance with intelligent texture merging.
+            </p>
+            
+            <div class="pronunciation">
+                <strong>Pronounced:</strong> OZ-ee-um • <strong>Atomic:</strong> O₇₆
+            </div>
+            
+            <div class="stats">
+                <div class="stat-card">
+                    <span class="stat-number" id="fps-boost">+60%</span>
+                    <span class="stat-label">Average FPS Boost</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="drawcalls">-70%</span>
+                    <span class="stat-label">Fewer Draw Calls</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="compatibility">100%</span>
+                    <span class="stat-label">Mod Compatibility</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="textures">-80%</span>
+                    <span class="stat-label">Texture Binds</span>
+                </div>
+            </div>
+            
+            <div class="buttons">
+                <a href="#download" class="btn btn-primary">
+                    <span>⬇️</span> Download Now
+                </a>
+                <a href="#features" class="btn btn-secondary">
+                    <span>⚡</span> View Features
+                </a>
+                <a href="https://github.com/Xenoscurse/osium" target="_blank" class="btn btn-secondary">
+                    <span>🐙</span> GitHub
+                </a>
+            </div>
+            
+            <div class="code-snippet">
+                <div class="code-header">
+                    <span class="code-dot red"></span>
+                    <span class="code-dot yellow"></span>
+                    <span class="code-dot green"></span>
+                    <span class="code-title">config/osium.json</span>
+                </div>
+                <pre><code>{
+  "enabled": true,
+  "maxAtlasSize": 8192,
+  "aggressiveMerging": false,
+  "debugOverlay": true,
+  "mipmapLevel": 4,
+  "textureCompression": 2
+}</code></pre>
+            </div>
+        </header>
+        
+        <section id="features" class="features">
+            <h2 class="section-title">Why Choose Osium?</h2>
+            <p class="section-subtitle">
+                Named after one of the densest elements, Osium provides the densest possible performance optimizations.
+            </p>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Massive Performance Gains</h3>
+                    <p>Up to 60% FPS improvement in texture-heavy scenarios. Perfect for shaders, HD resource packs, and heavy modpacks.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🎨</div>
+                    <h3>Zero Visual Quality Loss</h3>
+                    <p>Optimization is completely invisible. Your textures look exactly the same, just render significantly faster.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🔌</div>
+                    <h3>Full Mod Compatibility</h3>
+                    <p>Works alongside Sodium, OptiFine, Iris, and most popular mods. No conflicts, just pure optimization.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">⚙️</div>
+                    <h3>Smart Dynamic Adaptation</h3>
+                    <p>Automatically adjusts optimization based on your GPU, texture packs, and performance needs.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Real-time Performance Monitoring</h3>
+                    <p>Built-in debug overlay (F6) shows draw call reduction, FPS gains, and optimization metrics.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🚀</div>
+                    <h3>Easy Configuration</h3>
+                    <p>Simple JSON configuration with sensible defaults. Works out of the box, no complex setup needed.</p>
+                </div>
+            </div>
+        </section>
+        
+        <section id="download" class="features" style="background: rgba(93, 123, 147, 0.1);">
+            <h2 class="section-title">Download Osium</h2>
+            <p class="section-subtitle">Available for Fabric and Quilt. Coming soon to Modrinth and CurseForge.</p>
+            
+            <div class="buttons" style="margin-top: 2rem;">
+                <a href="https://github.com/Xenoscurse/osium/releases" target="_blank" class="btn btn-primary" style="font-size: 1.2rem;">
+                    <span>🐙</span> GitHub Releases
+                </a>
+                <a href="#coming-soon" class="btn btn-secondary" style="font-size: 1.2rem;">
+                    <span>📦</span> Modrinth (Soon)
+                </a>
+                <a href="#coming-soon" class="btn btn-secondary" style="font-size: 1.2rem;">
+                    <span>🌐</span> CurseForge (Soon)
+                </a>
+            </div>
+            
+            <div class="code-snippet" style="margin-top: 3rem; max-width: 800px;">
+                <div class="code-header">
+                    <span class="code-dot red"></span>
+                    <span class="code-dot yellow"></span>
+                    <span class="code-dot green"></span>
+                    <span class="code-title">Installation Guide</span>
+                </div>
+                <pre><code>1. Install Fabric Loader (https://fabricmc.net/use/)
+2. Download Fabric API (required)
+3. Download Osium from GitHub/Modrinth
+4. Place .jar files in your 'mods' folder
+5. Launch Minecraft and enjoy the performance boost!</code></pre>
+            </div>
+            
+            <div style="margin-top: 3rem; padding: 2rem; background: rgba(255,255,255,0.05); border-radius: var(--radius); max-width: 800px; margin-left: auto; margin-right: auto;">
+                <h3 style="text-align: center; margin-bottom: 1rem; color: var(--secondary);">📅 Development Timeline</h3>
+                <ul style="list-style: none; padding: 0; max-width: 500px; margin: 0 auto;">
+                    <li style="margin-bottom: 1rem; padding-left: 2rem; position: relative;">
+                        <span style="position: absolute; left: 0; color: var(--primary);">✓</span>
+                        <strong>December 2023:</strong> Website launch & planning
+                    </li>
+                    <li style="margin-bottom: 1rem; padding-left: 2rem; position: relative;">
+                        <span style="position: absolute; left: 0; color: var(--primary);">→</span>
+                        <strong>December 27th:</strong> Mod development begins
+                    </li>
+                    <li style="margin-bottom: 1rem; padding-left: 2rem; position: relative;">
+                        <span style="position: absolute; left: 0; color: var(--text-muted);">○</span>
+                        <strong>January 2024:</strong> Alpha release & testing
+                    </li>
+                    <li style="margin-bottom: 1rem; padding-left: 2rem; position: relative;">
+                        <span style="position: absolute; left: 0; color: var(--text-muted);">○</span>
+                        <strong>February 2024:</strong> Public beta release
+                    </li>
+                </ul>
+            </div>
+        </section>
+        
+        <footer class="footer">
+            <div class="footer-links">
+                <a href="https://github.com/Xenoscurse/osium" target="_blank">GitHub</a>
+                <a href="https://github.com/Xenoscurse/osium/issues" target="_blank">Report Issues</a>
+                <a href="#privacy">Privacy</a>
+                <a href="#terms">Terms</a>
+            </div>
+            
+            <p style="margin-top: 2rem;">
+                © 2024 Osium Mod. Not affiliated with Mojang or Microsoft.<br>
+                Minecraft is a trademark of Mojang AB.
+            </p>
+            
+            <p style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.7;">
+                Made with ❤️ for the Minecraft community • Version 1.0.0-alpha
+            </p>
+            
+            <p style="margin-top: 2rem; font-size: 0.8rem; opacity: 0.5;">
+                Website created from mobile • Full development begins December 27th
+            </p>
+            
+            <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1); max-width: 500px; margin-left: auto; margin-right: auto;">
+                <p style="font-size: 0.8rem; opacity: 0.6;">
+                    <strong>Osium:</strong> OZ-ee-um, from the element osmium (Os), the densest naturally occurring element.
+                    Just as osmium packs more mass into less space, Osium packs more performance into your Minecraft.
+                </p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const notification = document.getElementById('notification');
+            setTimeout(() => {
+                notification.classList.add('show');
+                setTimeout(() => notification.classList.remove('show'), 5000);
+            }, 1000);
+            
+            function animateStat(element, finalValue, duration = 2000) {
+                const start = 0;
+                const isPercent = element.textContent.includes('%');
+                const hasSign = element.textContent.includes('+') || element.textContent.includes('-');
+                const sign = hasSign ? element.textContent.charAt(0) : '';
+                const cleanValue = parseInt(element.textContent.replace(/[+\-%]/g, ''));
+                
+                const increment = cleanValue / (duration / 16);
+                let current = 0;
+                
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= cleanValue) {
+                        element.textContent = sign + cleanValue + (isPercent ? '%' : '');
+                        clearInterval(timer);
+                    } else {
+                        element.textContent = sign + Math.floor(current) + (isPercent ? '%' : '');
+                    }
+                }, 16);
+            }
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const stats = ['fps-boost', 'drawcalls', 'compatibility', 'textures'];
+                        stats.forEach(id => {
+                            const element = document.getElementById(id);
+                            if (element) animateStat(element, 100);
+                        });
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.5 });
+            
+            const statsSection = document.querySelector('.stats');
+            if (statsSection) observer.observe(statsSection);
+            
+            const scrollProgress = document.getElementById('scroll-progress');
+            window.addEventListener('scroll', () => {
+                const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+                const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                const scrolled = (winScroll / height) * 100;
+                scrollProgress.style.width = scrolled + '%';
+            });
+            
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    const href = this.getAttribute('href');
+                    if (href === '#') return;
+                    
+                    e.preventDefault();
+                    const targetElement = document.querySelector(href);
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+            
+            console.log('Osium website loaded successfully! 🚀');
+        });
+        
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            
+            const notification = document.getElementById('notification');
+            notification.querySelector('p').textContent = `Switched to ${newTheme} theme`;
+            notification.classList.add('show');
+            setTimeout(() => notification.classList.remove('show'), 2000);
+        }
+        
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+    </script>
+</body>
+</html>
