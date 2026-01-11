@@ -3,667 +3,293 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Osium - Performance Optimizer</title>
-    <link rel="icon" href="data:image/ksosnufifnsvg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22 fill=%22%23ffffff%22>⚡</text></svg>">
+    <title>Quorium - Performance Optimizer</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,
+    <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'>
+        <text y='0.9em' font-size='90'>⚡</text>
+    </svg>">
+
     <style>
         :root {
-            /* Chrome & Black Theme */
+            /* Chrome Theme */
             --chrome-base: #0a0a0a;
-            --chrome-dark: #000000mjejdjn;
-            --chromejjdndn-light: #1a1a1akjdjdju)r88r7;
+            --chrome-dark: #000000;
+            --chrome-light: #1a1a1a;
             --chrome-border: rgba(255, 255, 255, 0.12);
-            --chrome-highlight: rgba(255, 255, 255, 0.08);
-            
-            /* Accent Chrome */
+
             --chrome-accent: linear-gradient(135deg, #e5e5e5 0%, #ffffff 100%);
-            --chrome-glow: rgba(255, 255, 255, 0.15);
-            
-            /* Text */
             --text-primary: rgba(255, 255, 255, 0.95);
             --text-secondary: rgba(255, 255, 255, 0.6);
-            
-            /* Effects */
+
             --blur-sm: 8px;
             --blur-lg: 20px;
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition: all 0.3s ease;
             --radius-sm: 12px;
             --radius-lg: 20px;
             --radius-full: 100px;
         }
-        
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
-            font-family: -apple-system, system-ui, sans-serif;
+            font-family: system-ui, -apple-system, sans-serif;
             background: var(--chrome-base);
             color: var(--text-primary);
-            min-height: 
+            min-height: 100vh;
             -webkit-font-smoothing: antialiased;
         }
-        
-        /* Chrome Background Effects */
+
         body::before {
             content: '';
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: 
-                radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.03) 0%, transparent 50%),
-                radial-gradient(circle at 90% 30%, rgba(255, 255, 255, 0.02) 0%, transparent 50%),
-                linear-gradient(180deg, var(--chrome-dark) 0%, var(--chrome-base) 100%);
-            pointer-events: none;
+            inset: 0;
+            background:
+                radial-gradient(circle at 10% 20%, rgba(255,255,255,0.03), transparent 50%),
+                radial-gradient(circle at 90% 30%, rgba(255,255,255,0.02), transparent 50%),
+                linear-gradient(180deg, var(--chrome-dark), var(--chrome-base));
             z-index: -1;
         }
-        
-        /* Chrome Glass */
+
+        /* Glass */
         .chrome-glass {
             background: rgba(20, 20, 20, 0.7);
             backdrop-filter: blur(var(--blur-lg)) saturate(180%);
-            -webkit-backdrop-filter: blur(var(--blur-lg)) saturate(180%);
-            border: 1px solid var(--chrome-border):
+            border: 1px solid var(--chrome-border);
+            border-radius: var(--radius-lg);
+            transition: var(--transition);
         }
-        
-        .chrome-glass::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, 
-                rgba(255, 255, 255, 0.1) 0%, 
-                rgba(255, 255, 255, 0.05) 50%, 
-                rgba(255, 255, 255, 0) 100%);
-            pointer-events: none;
-        }
-        
+
         .chrome-glass:hover {
-            border-color: rgba(255, 255, 255, 0.2);
             transform: translateY(-2px);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 10px 32px rgba(0,0,0,0.35);
         }
-        
-        /* Minimal Navigation */
+
+        /* Navigation */
         .nav {
             position: fixed;
-            top: 23772773927;
+            top: 16px;
             left: 50%;
             transform: translateX(-50%);
             width: 90%;
-            max-width: 500px;
-            z-index: 100;
+            max-width: 520px;
             padding: 12px 24px;
+            z-index: 100;
         }
-        
+
         .nav-content {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        
+
         .logo {
-            font-size: 1.2rem;
             font-weight: 600;
+            font-size: 1.2rem;
             background: var(--chrome-accent);
-            -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
             text-decoration: none;
-            letter-spacing: -0.5px;
         }
-        
+
         .nav-links {
             display: flex;
-            gap: 16px;
+            gap: 14px;
         }
-        
+
         .nav-link {
             color: var(--text-secondary);
             text-decoration: none;
-            font-size: 0.9rem;
-            padding: 8px 16px;
+            padding: 6px 14px;
             border-radius: var(--radius-full);
-            transition: var(--transition);
         }
-        
+
         .nav-link:hover,
         .nav-link.active {
             color: var(--text-primary);
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255,255,255,0.08);
         }
-        
+
         /* Hero */
         .hero {
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 80px 24px 40px;
+            padding: 120px 24px 40px;
             text-align: center;
         }
-        
-        .hero-content {
-            max-width: 800px;
-        }
-        
+
         .hero-title {
             font-size: 3rem;
-            font-weight: 700;
-            line-height: 1.1;
-            margin-bottom: 1.5rem;
             background: var(--chrome-accent);
-            -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            letter-spacing: -1px;
+            margin-bottom: 1rem;
         }
-        
+
         .hero-subtitle {
-            font-size: 1.1rem;
             color: var(--text-secondary);
-            line-height: 1.6;
             max-width: 600px;
-            margin: 0 auto 3rem;
+            margin: 0 auto 2.5rem;
         }
-        
-        /* Buttons */
+
         .buttons {
             display: flex;
             gap: 16px;
             justify-content: center;
             flex-wrap: wrap;
         }
-        
+
         .btn {
             padding: 14px 32px;
             border-radius: var(--radius-full);
             text-decoration: none;
-            font-weight: 500;
-            font-size: 0.95rem;
-            transition: var(--transition);
+            font-weight: 600;
             display: inline-flex;
             align-items: center;
             gap: 8px;
         }
-        
+
         .btn-primary {
             background: var(--chrome-accent);
-            color: var(--chrome-dark);
-            font-weight: 600;
+            color: #000;
         }
-        
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(255, 255, 255, 0.1);
-        }
-        
+
         .btn-secondary {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255,255,255,0.05);
             color: var(--text-primary);
             border: 1px solid var(--chrome-border);
         }
-        
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(255, 255, 255, 0.2);
-        }
-        
-        /* Features */
+
+        /* Sections */
         .section {
             padding: 80px 24px;
         }
-        
-        .section-header {
-            text-align: center;
-            margin-bottom: 60px;
-        }
-        
+
         .section-title {
             font-size: 2rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
             background: var(--chrome-accent);
-            -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
+            margin-bottom: 1rem;
+            text-align: center;
         }
-        
+
         .section-subtitle {
+            text-align: center;
             color: var(--text-secondary);
-            font-size: 1rem;
-            max-width: 500px;
-            margin: 0 auto;
-            line-height: 1.6;
+            max-width: 520px;
+            margin: 0 auto 50px;
         }
-        
-        /* Grid */
+
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
             gap: 24px;
             max-width: 1000px;
-            margin: 0 auto;
+            margin: auto;
         }
-        
+
         .card {
             padding: 32px;
         }
-        
+
         .card-icon {
             font-size: 2rem;
-            margin-bottom: 20px;
-            opacity: 0.9;
+            margin-bottom: 16px;
         }
-        
-        .card h3 {
-            font-size: 1.1rem;
-            margin-bottom: 12px;
-            font-weight: 600;
-        }
-        
-        .card p {
-            color: var(--text-secondary);
-            line-height: 1.6;
-            font-size: 0.9rem;
-        }
-        
-        /* Stats */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 20px;
-            max-width: 800px;
-            margin: 40px auto;
-        }
-        
-        .stat {
-            padding: 24px;
-            text-align: center;
-        }
-        
-        .stat-number {
-            font-size: 2.5rem;
-            font-weight: 700;
-            background: var(--chrome-accent);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            display: block;
-            line-height: 1;
-            margin-bottom: 8px;
-        }
-        
-        .stat-label {
-            color: var(--text-secondary);
-            font-size: 0.85rem;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-        
-        /* Download */
-        .download-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 24px;
-            max-width: 800px;
-            margin: 40px auto;
-        }
-        
-        .download-card {
-            padding: 32px;
-            text-align: center;
-            text-decoration: none;
-            color: inherit;
-        }
-        
-        .download-icon {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-            opacity: 0.9;
-        }
-        
-        .download-card h3 {
-            font-size: 1.2rem;
-            margin-bottom: 12px;
-            font-weight: 600;
-        }
-        
-        .download-card p {
-            color: var(--text-secondary);
-            line-height: 1.6;
-            font-size: 0.9rem;
-        }
-        
+
         /* Footer */
         .footer {
-            padding: 60px 24px 40px;
             text-align: center;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            margin-top: 40px;
+            padding: 60px 24px 40px;
+            border-top: 1px solid rgba(255,255,255,0.05);
         }
-        
+
         .footer-logo {
-            font-size: 1.5rem;
-            font-weight: 600;
+            font-size: 1.6rem;
             background: var(--chrome-accent);
-            -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
             margin-bottom: 24px;
-            display: inline-block;
         }
-        
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 24px;
-            flex-wrap: wrap;
-            margin-bottom: 32px;
-        }
-        
-        .footer-link {
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-size: 0.9rem;
-            transition: var(--transition);
-        }
-        
-        .footer-link:hover {
-            color: var(--text-primary);
-        }
-        
+
         .footer-bottom {
             color: var(--text-secondary);
             font-size: 0.85rem;
-            padding-top: 32px;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
         }
-        
-        /* Back to Top */
-        .back-top {
-            position: fixed;
-            bottom: 24px;
-            right: 24px;
-            width: 44px;
-            height: 44px;
-            background: rgba(20, 20, 20, 0.7);
-            backdrop-filter: blur(var(--blur-sm));
-            border: 1px solid var(--chrome-border);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-            color: var(--text-primary);
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(20px);
-            transition: var(--transition);
-            z-index: 99;
-        }
-        
-        .back-top.visible {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
-        
-        .back-top:hover {
-            border-color: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
-        }
-        
-        /* Responsive */
+
         @media (max-width: 768px) {
             .hero-title { font-size: 2.2rem; }
-            .section-title { font-size: 1.8rem; }
-            .nav { padding: 12px 20px; }
-            .nav-links { gap: 12px; }
-            .nav-link { padding: 6px 12px; font-size: 0.85rem; }
-            .buttons { flex-direction: column; align-items: center; }
-            .btn { width: 100%; max-width: 280px; justify-content: center; }
-            .grid { grid-template-columns: 1fr; }
-            .download-cards { grid-template-columns: 1fr; }
-        }
-        
-        @media (max-width: 480px) {
-            .hero-title { font-size: 1.8rem; }
-            .section-title { font-size: 1.5rem; }
             .nav-links { display: none; }
         }
     </style>
 </head>
+
 <body>
-    <!-- Navigation -->
-    <nav class="nav chrome-glass">
-        <div class="nav-content">
-            <a href="#home" class="logo">OSIUM</a>
-            <div class="nav-links">
-                <a href="#home" class="nav-link active">Home</a>
-                <a href="#features" class="nav-link">Features</a>
-                <a href="#stats" class="nav-link">Stats</a>
-                <a href="#download" class="nav-link">Download</a>
-            </div>
+
+<nav class="nav chrome-glass">
+    <div class="nav-content">
+        <a class="logo" href="#home">QUORIUM</a>
+        <div class="nav-links">
+            <a href="#home" class="nav-link active">Home</a>
+            <a href="#features" class="nav-link">Features</a>
+            <a href="#download" class="nav-link">Download</a>
         </div>
-    </nav>
-    
-    <!-- Back to Top -->
-    <a href="#home" class="back-top chrome-glass" id="back-top">
-        ↑
-    </a>
-    
-    <!-- Hero -->
-    <section id="home" class="hero">
-        <div class="hero-content">
-            <h1 class="hero-title">Maximum Performance</h1>
-            <p class="hero-subtitle">
-                Advanced GPU optimization for buttery-smooth gameplay. Minimal overhead, maximum frames.
-            </p>
-            <div class="buttons">
-                <a href="#download" class="btn btn-primary chrome-glass">
-                    ⚡ Download
-                </a>
-                <a href="#features" class="btn btn-secondary chrome-glass">
-                    Learn More
-                </a>
-            </div>
+    </div>
+</nav>
+
+<section id="home" class="hero">
+    <div>
+        <h1 class="hero-title">Maximum Performance</h1>
+        <p class="hero-subtitle">
+            Advanced optimization for ultra-smooth gameplay with minimal overhead.
+        </p>
+        <div class="buttons">
+            <a href="#download" class="btn btn-primary">⚡ Download</a>
+            <a href="#features" class="btn btn-secondary">Learn More</a>
         </div>
-    </section>
-    
-    <!-- Features -->
-    <section id="features" class="section">
-        <div class="section-header">
-            <h2 class="section-title">Advanced Features</h2>
-            <p class="section-subtitle">
-                Smart optimization technology that works seamlessly in the background
-            </p>
+    </div>
+</section>
+
+<section id="features" class="section">
+    <h2 class="section-title">Advanced Features</h2>
+    <p class="section-subtitle">Smart performance tuning that runs silently in the background</p>
+
+    <div class="grid">
+        <div class="card chrome-glass">
+            <div class="card-icon">⚡</div>
+            <h3>High Performance</h3>
+            <p>Frame stability improvements with zero configuration.</p>
         </div>
-        <div class="grid">
-            <div class="card chrome-glass">
-                <div class="card-icon">⚡</div>
-                <h3>GPU Acceleration</h3>
-                <p>Hardware-level optimization for zero-overhead performance gains</p>
-            </div>
-            <div class="card chrome-glass">
-                <div class="card-icon">🌀</div>
-                <h3>Smart Caching</h3>
-                <p>Intelligent texture streaming with adaptive memory management</p>
-            </div>
-            <div class="card chrome-glass">
-                <div class="card-icon">🔌</div>
-                <h3>Full Compatibility</h3>
-                <p>Works with Fabric, Sodium, Iris, and all popular mods</p>
-            </div>
+
+        <div class="card chrome-glass">
+            <div class="card-icon">🌀</div>
+            <h3>Smart Resource Usage</h3>
+            <p>Dynamic optimization for CPU and GPU workloads.</p>
         </div>
-    </section>
-    
-    <!-- Stats -->
-    <section id="stats" class="section">
-        <div class="section-header">
-            <h2 class="section-title">Performance Metrics</h2>
-            <p class="section-subtitle">
-                Real-world results from optimized gameplay sessions
-            </p>
+
+        <div class="card chrome-glass">
+            <div class="card-icon">🔌</div>
+            <h3>Mod Friendly</h3>
+            <p>Compatible with Fabric, Sodium, Iris, and more.</p>
         </div>
-        <div class="stats-grid">
-            <div class="stat chrome-glass">
-                <span class="stat-number" data-count="87">0</span>
-                <span class="stat-label">FPS Boost</span>
-            </div>
-            <div class="stat chrome-glass">
-                <span class="stat-number" data-count="94">0</span>
-                <span class="stat-label">Efficiency</span>
-            </div>
-            <div class="stat chrome-glass">
-                <span class="stat-number" data-count="0">0</span>
-                <span class="stat-label">Latency</span>
-            </div>
-            <div class="stat chrome-glass">
-                <span class="stat-number">∞</span>
-                <span class="stat-label">Satisfaction</span>
-            </div>
-        </div>
-    </section>
-    
-    <!-- Download -->
-    <section id="download" class="section">
-        <div class="section-header">
-            <h2 class="section-title">Get Started</h2>
-            <p class="section-subtitle">
-                Join thousands of players experiencing smoother gameplay
-            </p>
-        </div>
-        <div class="download-cards">
-            <a href="https://modrinth.com" target="_blank" class="download-card chrome-glass">
-                <div class="download-icon">📦</div>
-                <h3>Modrinth</h3>
-                <p>Modern platform with automated updates and version management</p>
-            </a>
-            <a href="#" class="download-card chrome-glass">
-                <div class="download-icon">💾</div>
-                <h3>Direct Download</h3>
-                <p>Get the latest version directly from our servers</p>
-            </a>
-        </div>
-    </section>
-    
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-logo">OSIUM</div>
-        <div class="footer-links">
-            <a href="#home" class="footer-link">Home</a>
-            <a href="#features" class="footer-link">Features</a>
-            <a href="#stats" class="footer-link">Stats</a>
-            <a href="#download" class="footer-link">Download</a>
-            <a href="#" class="footer-link">GitHub</a>
-            <a href="#" class="footer-link">Support</a>
-        </div>
-        <div class="footer-bottom">
-            <p>© 2025 Osium. Made for the community.</p>
-            <p style="margin-top: 8px; opacity: 0.7; font-size: 0.8rem;">
-                Not affiliated with Mojang Studios.
-            </p>
-        </div>
-    </footer>
-    
-    <script>
-        // Smooth navigation
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                const targetId = this.getAttribute('href');
-                const target = document.querySelector(targetId);
-                
-                if (target) {
-                    // Update active link
-                    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-                    this.classList.add('active');
-                    
-                    // Smooth scroll
-                    window.scrollTo({
-                        top: target.offsetTop - 80,
-                        behavior: 'smooth'
-                    });
-                }
-            });
-        });
-        
-        // Update active link on scroll
-        const sections = document.querySelectorAll('section');
-        const navLinks = document.querySelectorAll('.nav-link');
-        
-        function updateActiveLink() {
-            let current = '';
-            const scrollPos = window.scrollY + 100;
-            
-            sections.forEach(section => {
-                if (scrollPos >= section.offsetTop && scrollPos < section.offsetTop + section.clientHeight) {
-                    current = section.getAttribute('id');
-                }
-            });
-            
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('href') === `#${current}`) {
-                    link.classList.add('active');
-                }
-            });
-        }
-        
-        // Back to top
-        const backTop = document.getElementById('back-top');
-        
-        window.addEventListener('scroll', () => {
-            updateActiveLink();
-            
-            // Show back to top button
-            if (window.scrollY > 400) {
-                backTop.classList.add('visible');
-            } else {
-                backTop.classList.remove('visible');
-            }
-        });
-        
-        // Animate stats
-        const statsSection = document.getElementById('stats');
-        const statNumbers = document.querySelectorAll('.stat-number');
-        
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    statNumbers.forEach(stat => {
-                        const target = stat.getAttribute('data-count');
-                        if (!target) return;
-                        
-                        const targetNum = parseInt(target);
-                        let current = 0;
-                        const duration = 1500;
-                        const step = targetNum / (duration / 16);
-                        
-                        const timer = setInterval(() => {
-                            current += step;
-                            if (current >= targetNum) {
-                                stat.textContent = target;
-                                clearInterval(timer);
-                            } else {
-                                stat.textContent = Math.floor(current);
-                            }
-                        }, 16);
-                    });
-                    
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.3 });
-        
-        if (statsSection) observer.observe(statsSection);
-        
-        // Initialize
-        updateActiveLink();
-    </script>
+    </div>
+</section>
+
+<footer class="footer">
+    <div class="footer-logo">QUORIUM</div>
+    <div class="footer-bottom">
+        © 2025 Quorium — Community Optimizer<br>
+        Not affiliated with Mojang Studios
+    </div>
+</footer>
+
 </body>
 </html>
