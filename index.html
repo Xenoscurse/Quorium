@@ -10,9 +10,9 @@
     <meta name="description" content="Enterprise-grade Lua code obfuscation. Protect your scripts with military-grade encryption and anti-tamper technology.">
     <meta name="author" content="Xenoscurse">
     
-    <!-- Favicon / Logo - REPLACE WITH YOUR WORKING IMAGE URL -->
-    <link rel="icon" type="image/png" href="https://i.imgur.com/PLACE_YOUR_IMAGE_ID_HERE.png">
-    <link rel="apple-touch-icon" href="https://i.imgur.com/PLACE_YOUR_IMAGE_ID_HERE.png">
+    <!-- Favicon / Logo -->
+    <link rel="icon" type="image/gif" href="https://cdn.discordapp.com/attachments/1470139867169165506/1471637177866649748/culled1.gif?ex=698fa86c&is=698e56ec&hm=b5f8a5eacc86e1e293553a2642e52239ef46081aa9a7ce1f99b585b80386fcec&">
+    <link rel="apple-touch-icon" href="https://cdn.discordapp.com/attachments/1470139867169165506/1471637177866649748/culled1.gif?ex=698fa86c&is=698e56ec&hm=b5f8a5eacc86e1e293553a2642e52239ef46081aa9a7ce1f99b585b80386fcec&">
     
     <!-- Background Image -->
     <meta name="background-image" content="https://i.pinimg.com/1200x/d4/aa/20/d4aa2073fe6345ef4bc47350e9e94358.jpg">
@@ -60,20 +60,26 @@
             <a href="#pricing" class="px-4 py-2 bg-zinc-900/80 backdrop-blur-xl border border-zinc-800/50 rounded-xl text-sm text-zinc-300 hover:text-white hover:bg-zinc-800/80 transition-all shadow-lg">
                 pricing
             </a>
+            <a href="#dashboard" class="px-4 py-2 bg-zinc-900/80 backdrop-blur-xl border border-zinc-800/50 rounded-xl text-sm text-zinc-300 hover:text-white hover:bg-zinc-800/80 transition-all shadow-lg">
+                dashboard
+            </a>
             <a href="https://github.com/Xenoscurse/Culled" target="_blank" class="px-4 py-2 bg-zinc-900/80 backdrop-blur-xl border border-zinc-800/50 rounded-xl text-sm text-zinc-300 hover:text-white hover:bg-zinc-800/80 transition-all shadow-lg">
                 github
             </a>
-            <button onclick="document.getElementById('editor').scrollIntoView({ behavior: 'smooth' })" class="px-5 py-2 bg-white text-black text-sm font-medium rounded-xl hover:bg-zinc-100 transition-all shadow-lg">
-                try free
+            <button id="loginBtn" onclick="showLoginModal()" class="px-5 py-2 bg-white text-black text-sm font-medium rounded-xl hover:bg-zinc-100 transition-all shadow-lg">
+                sign in
+            </button>
+            <button id="logoutBtn" onclick="logout()" class="hidden px-5 py-2 bg-zinc-700 text-white text-sm font-medium rounded-xl hover:bg-zinc-600 transition-all shadow-lg">
+                sign out
             </button>
         </nav>
 
         <!-- Logo -->
         <header class="fixed top-6 left-6 z-50">
             <div class="flex items-center gap-3 px-4 py-2 bg-zinc-900/80 backdrop-blur-xl border border-zinc-800/50 rounded-xl shadow-lg">
-                <div class="w-8 h-8 bg-purple-500/20 rounded-lg flex items-center justify-center">
-                    <span class="text-xl font-bold text-purple-400">C</span>
-                </div>
+                <img src="https://cdn.discordapp.com/attachments/1470139867169165506/1471637177866649748/culled1.gif?ex=698fa86c&is=698e56ec&hm=b5f8a5eacc86e1e293553a2642e52239ef46081aa9a7ce1f99b585b80386fcec&" 
+                     alt="Culled Logo" 
+                     class="w-8 h-8 object-contain rounded-lg">
                 <span class="text-xl font-bold bg-gradient-to-r from-white to-purple-200 bg-clip-text text-transparent">culled</span>
             </div>
         </header>
@@ -82,9 +88,9 @@
         <section class="pt-32 pb-12 px-6">
             <div class="max-w-4xl mx-auto text-center">
                 <div class="flex justify-center mb-6 animate-float">
-                    <div class="w-24 h-24 bg-purple-500/20 rounded-2xl flex items-center justify-center border-2 border-purple-500/50">
-                        <span class="text-5xl font-bold text-purple-400">C</span>
-                    </div>
+                    <img src="https://cdn.discordapp.com/attachments/1470139867169165506/1471637177866649748/culled1.gif?ex=698fa86c&is=698e56ec&hm=b5f8a5eacc86e1e293553a2642e52239ef46081aa9a7ce1f99b585b80386fcec&" 
+                         alt="Culled Logo" 
+                         class="w-24 h-24 object-contain rounded-2xl border-2 border-purple-500/50">
                 </div>
                 
                 <h1 class="text-7xl font-bold mb-6 bg-gradient-to-b from-white via-purple-200 to-zinc-400 bg-clip-text text-transparent">
@@ -109,7 +115,7 @@
             </div>
         </section>
 
-        <!-- ========== OBFUSCATOR ENGINE WITH TIER LOGIC ========== -->
+        <!-- ========== OBFUSCATOR ENGINE ========== -->
         <section id="editor" class="max-w-7xl mx-auto px-6 py-12">
             <div class="bg-zinc-900/50 backdrop-blur-xl border border-zinc-800/50 rounded-3xl p-8 shadow-2xl">
                 <!-- Editor Header with Tier Display -->
@@ -124,7 +130,7 @@
                     </div>
                     <div class="flex items-center gap-3">
                         <!-- Current Tier Badge -->
-                        <span id="currentTierBadge" class="px-3 py-1.5 bg-purple-500/20 border border-purple-500/50 rounded-lg text-xs text-purple-300">
+                        <span id="currentTierBadge" class="px-3 py-1.5 bg-zinc-800/50 border border-zinc-700/50 rounded-lg text-xs text-zinc-300">
                             FREE TIER · 10/10 remaining
                         </span>
                         <select id="languageSelect" class="px-3 py-1.5 bg-zinc-800/50 border border-zinc-700/50 rounded-lg text-sm text-zinc-300 focus:outline-none focus:border-purple-500">
@@ -157,7 +163,7 @@ end</textarea>
                         </div>
                     </div>
 
-                    <!-- Output -->
+                    <!-- Output - FIXED: Now shows obfuscated code correctly -->
                     <div class="relative group">
                         <div class="relative bg-zinc-950/70 border border-zinc-800/50 rounded-2xl overflow-hidden">
                             <div class="px-4 py-3 border-b border-zinc-800/50 flex items-center justify-between">
@@ -177,9 +183,9 @@ end</textarea>
                     </div>
                 </div>
 
-                <!-- Action Bar with Tier Controls -->
+                <!-- Action Bar -->
                 <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
-                    <!-- Advanced Parameters (Hidden for Free Tier) -->
+                    <!-- Advanced Parameters -->
                     <div id="advancedParams" class="flex items-center gap-3 text-sm text-zinc-500 opacity-50 pointer-events-none">
                         <span class="px-3 py-1.5 bg-zinc-800/50 rounded-lg flex items-center gap-1">
                             <span class="w-2 h-2 bg-gray-500 rounded-full"></span>
@@ -210,7 +216,92 @@ end</textarea>
             </div>
         </section>
 
-        <!-- ========== PRICING SECTION - 3 TIERS ========== -->
+        <!-- ========== DASHBOARD - VIEW & CANCEL SUBSCRIPTIONS ========== -->
+        <section id="dashboard" class="max-w-7xl mx-auto px-6 py-20">
+            <div class="bg-zinc-900/50 backdrop-blur-xl border border-zinc-800/50 rounded-3xl p-8 shadow-2xl">
+                <div class="flex items-center justify-between mb-8">
+                    <h2 class="text-3xl font-bold bg-gradient-to-b from-white to-purple-200 bg-clip-text text-transparent">
+                        subscription dashboard
+                    </h2>
+                    <span id="dashboardAuth" class="px-4 py-2 bg-zinc-800/50 rounded-lg text-sm text-zinc-400">
+                        not signed in
+                    </span>
+                </div>
+
+                <!-- Not Signed In State -->
+                <div id="notSignedInMessage" class="text-center py-12">
+                    <svg class="w-20 h-20 text-zinc-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                    </svg>
+                    <h3 class="text-xl text-white mb-2">sign in to view your subscription</h3>
+                    <p class="text-zinc-400 mb-6">manage your plan, view usage, or cancel anytime</p>
+                    <button onclick="showLoginModal()" class="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-xl transition-all">
+                        sign in with github
+                    </button>
+                </div>
+
+                <!-- Signed In State (Hidden by Default) -->
+                <div id="signedInDashboard" class="hidden">
+                    <!-- User Info -->
+                    <div class="bg-zinc-800/30 rounded-2xl p-6 mb-6">
+                        <div class="flex items-center gap-4">
+                            <img id="userAvatar" src="" alt="avatar" class="w-16 h-16 rounded-full border-2 border-purple-500/50">
+                            <div>
+                                <h3 id="userName" class="text-xl font-bold text-white">Username</h3>
+                                <p id="userEmail" class="text-zinc-400">email@example.com</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Subscription Details -->
+                    <div class="grid md:grid-cols-2 gap-6 mb-6">
+                        <div class="bg-zinc-800/30 rounded-2xl p-6">
+                            <h4 class="text-sm font-medium text-zinc-500 mb-2">current plan</h4>
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <span id="currentPlanBadge" class="text-2xl font-bold text-white">Free</span>
+                                    <p id="planPrice" class="text-zinc-400">$0/month</p>
+                                </div>
+                                <span id="planStatus" class="px-3 py-1 bg-green-500/20 border border-green-500/50 rounded-full text-xs text-green-300">active</span>
+                            </div>
+                        </div>
+                        <div class="bg-zinc-800/30 rounded-2xl p-6">
+                            <h4 class="text-sm font-medium text-zinc-500 mb-2">subscription details</h4>
+                            <p id="subscriptionStart" class="text-white">Started: N/A</p>
+                            <p id="subscriptionEnd" class="text-white">Renews: N/A</p>
+                        </div>
+                    </div>
+
+                    <!-- Usage Stats -->
+                    <div class="bg-zinc-800/30 rounded-2xl p-6 mb-8">
+                        <h4 class="text-sm font-medium text-zinc-500 mb-4">today's usage</h4>
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <span id="usageStats" class="text-2xl font-bold text-white">0/10</span>
+                                <span class="text-zinc-400 ml-2">obfuscations used</span>
+                            </div>
+                            <div class="w-64 h-2 bg-zinc-700 rounded-full overflow-hidden">
+                                <div id="usageBar" class="h-full bg-purple-600 rounded-full" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Danger Zone - Cancel Subscription -->
+                    <div id="cancelSection" class="border border-red-500/30 rounded-2xl p-6 bg-red-500/5 hidden">
+                        <h4 class="text-lg font-bold text-red-400 mb-2">cancel subscription</h4>
+                        <p class="text-zinc-400 text-sm mb-4">
+                            Once you cancel, you'll lose access to premium features at the end of your billing period. 
+                            Your usage data will be downgraded to the free tier (10 obfuscations/day).
+                        </p>
+                        <button onclick="confirmCancellation()" class="px-6 py-2.5 bg-red-600/20 hover:bg-red-600/30 border border-red-500/50 text-red-400 rounded-xl transition-all">
+                            cancel subscription
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========== PRICING SECTION - TRUTHFUL TIERS ========== -->
         <section id="pricing" class="max-w-7xl mx-auto px-6 py-20">
             <div class="text-center mb-16">
                 <h2 class="text-5xl font-bold mb-4 bg-gradient-to-b from-white to-purple-200 bg-clip-text text-transparent">
@@ -252,13 +343,19 @@ end</textarea>
                             <svg class="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                             </svg>
-                            <span class="text-zinc-300">standard processing</span>
+                            <span class="text-zinc-300">variable renaming</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <svg class="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span class="text-zinc-300">string encryption</span>
                         </li>
                         <li class="flex items-start gap-3 text-zinc-500">
                             <svg class="w-5 h-5 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                             </svg>
-                            <span class="text-zinc-500">no advanced parameters</span>
+                            <span class="text-zinc-500">no control flow</span>
                         </li>
                     </ul>
                     
@@ -303,7 +400,7 @@ end</textarea>
                             <svg class="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                             </svg>
-                            <span class="text-zinc-300"><span class="font-bold text-white">fast</span> processing speed</span>
+                            <span class="text-zinc-300"><span class="font-bold text-white">fast</span> processing (400ms)</span>
                         </li>
                         <li class="flex items-start gap-3">
                             <svg class="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -316,12 +413,6 @@ end</textarea>
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                             </svg>
                             <span class="text-zinc-300">junk code injection</span>
-                        </li>
-                        <li class="flex items-start gap-3">
-                            <svg class="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                            </svg>
-                            <span class="text-zinc-300">priority queue</span>
                         </li>
                     </ul>
                     
@@ -363,7 +454,7 @@ end</textarea>
                             <svg class="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                             </svg>
-                            <span class="text-zinc-300"><span class="font-bold text-white">ultra</span> processing speed</span>
+                            <span class="text-zinc-300"><span class="font-bold text-white">ultra</span> processing (200ms)</span>
                         </li>
                         <li class="flex items-start gap-3">
                             <svg class="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -382,12 +473,6 @@ end</textarea>
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                             </svg>
                             <span class="text-zinc-300">junk code injection</span>
-                        </li>
-                        <li class="flex items-start gap-3">
-                            <svg class="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                            </svg>
-                            <span class="text-zinc-300">priority queue + API access</span>
                         </li>
                     </ul>
                     
@@ -456,7 +541,7 @@ end</textarea>
                     <div class="flex items-center gap-2">
                         <span class="text-xl font-bold bg-gradient-to-r from-white to-purple-200 bg-clip-text text-transparent">culled</span>
                     </div>
-                    <p class="text-sm text-zinc-400">© 2026 culled · 3-tier obfuscation service</p>
+                    <p class="text-sm text-zinc-400">© 2026 culled · honest obfuscation</p>
                     <nav>
                         <ul class="flex items-center gap-6 text-sm text-zinc-400">
                             <li><a href="https://github.com/Xenoscurse/Culled" target="_blank" class="hover:text-white transition-colors">github</a></li>
@@ -469,10 +554,62 @@ end</textarea>
         </footer>
     </div>
 
+    <!-- ========== LOGIN MODAL ========== -->
+    <div id="loginModal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/80 backdrop-blur-sm">
+        <div class="bg-zinc-900 border border-zinc-800 rounded-3xl p-8 max-w-md w-full mx-4">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-white">sign in to culled</h3>
+                <button onclick="hideLoginModal()" class="text-zinc-500 hover:text-white">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            
+            <p class="text-zinc-400 mb-6 text-sm">Sign in with GitHub to manage your subscription and track usage.</p>
+            
+            <button onclick="loginWithGithub()" class="w-full py-3 bg-zinc-800 hover:bg-zinc-700 text-white rounded-xl transition-all flex items-center justify-center gap-3">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd"></path>
+                </svg>
+                continue with github
+            </button>
+            
+            <p class="text-xs text-zinc-600 mt-4 text-center">
+                We'll never post to your GitHub account.
+            </p>
+        </div>
+    </div>
+
+    <!-- ========== CANCEL CONFIRMATION MODAL ========== -->
+    <div id="cancelModal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/80 backdrop-blur-sm">
+        <div class="bg-zinc-900 border border-red-500/30 rounded-3xl p-8 max-w-md w-full mx-4">
+            <div class="w-16 h-16 bg-red-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg class="w-8 h-8 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </div>
+            
+            <h3 class="text-2xl font-bold text-white text-center mb-2">cancel subscription?</h3>
+            <p class="text-zinc-400 text-center mb-6">
+                This action cannot be undone. You'll lose access to premium features at the end of your billing period.
+            </p>
+            
+            <div class="flex gap-3">
+                <button onclick="hideCancelModal()" class="flex-1 py-3 bg-zinc-800 hover:bg-zinc-700 text-white rounded-xl transition-all">
+                    keep subscription
+                </button>
+                <button onclick="cancelSubscription()" class="flex-1 py-3 bg-red-600 hover:bg-red-700 text-white rounded-xl transition-all">
+                    yes, cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- ========== SUBSCRIPTION & OBFUSCATION LOGIC ========== -->
     <script>
         // =============================================
-        // TIER DEFINITIONS - YOUR 3 SPECIFICATIONS
+        // TIER DEFINITIONS - HONEST & ACCURATE
         // =============================================
         const TIERS = {
             free: {
@@ -488,9 +625,7 @@ end</textarea>
                     antiTamper: false,
                     junkCode: false,
                     stringEncryption: true,
-                    variableRenaming: true,
-                    priorityQueue: false,
-                    apiAccess: false
+                    variableRenaming: true
                 }
             },
             pro: {
@@ -506,9 +641,7 @@ end</textarea>
                     antiTamper: false,
                     junkCode: true,
                     stringEncryption: true,
-                    variableRenaming: true,
-                    priorityQueue: true,
-                    apiAccess: false
+                    variableRenaming: true
                 }
             },
             premium: {
@@ -518,15 +651,13 @@ end</textarea>
                 unlimited: true,
                 dailyQuota: Infinity,
                 processingSpeed: 'ultra', // 200ms delay
-                languages: ['lua', 'javascript', 'python', 'java', 'c#', 'c++', 'ruby', 'php', 'go', 'rust', 'swift', 'kotlin', 'typescript', 'scala', 'r'],
+                languages: ['lua', 'javascript', 'python', 'java', 'c#', 'c++', 'ruby', 'php', 'go', 'rust', 'swift', 'kotlin', 'typescript'],
                 features: {
                     controlFlow: true,
                     antiTamper: true,
                     junkCode: true,
                     stringEncryption: true,
-                    variableRenaming: true,
-                    priorityQueue: true,
-                    apiAccess: true
+                    variableRenaming: true
                 }
             }
         };
@@ -538,12 +669,155 @@ end</textarea>
             id: localStorage.getItem('culled_user_id') || 'anonymous_' + Math.random().toString(36).substr(2, 9),
             tier: localStorage.getItem('culled_user_tier') || 'free',
             subscription: JSON.parse(localStorage.getItem('culled_subscription') || 'null'),
-            usage: JSON.parse(localStorage.getItem('culled_usage') || '{}')
+            usage: JSON.parse(localStorage.getItem('culled_usage') || '{}'),
+            githubUser: JSON.parse(localStorage.getItem('culled_github_user') || 'null')
         };
 
         // Save user ID if not exists
         if (!localStorage.getItem('culled_user_id')) {
             localStorage.setItem('culled_user_id', currentUser.id);
+        }
+
+        // =============================================
+        // AUTHENTICATION (GITHUB MOCK)
+        // =============================================
+        function showLoginModal() {
+            document.getElementById('loginModal').style.display = 'flex';
+        }
+
+        function hideLoginModal() {
+            document.getElementById('loginModal').style.display = 'none';
+        }
+
+        function showCancelModal() {
+            document.getElementById('cancelModal').style.display = 'flex';
+        }
+
+        function hideCancelModal() {
+            document.getElementById('cancelModal').style.display = 'none';
+        }
+
+        function loginWithGithub() {
+            // Mock GitHub login - In production, replace with actual OAuth
+            const mockUser = {
+                login: 'culled_user',
+                name: 'Culled User',
+                email: 'user@example.com',
+                avatar_url: 'https://avatars.githubusercontent.com/u/583231?v=4',
+                id: Date.now().toString()
+            };
+            
+            currentUser.githubUser = mockUser;
+            localStorage.setItem('culled_github_user', JSON.stringify(mockUser));
+            
+            hideLoginModal();
+            updateUI();
+            updateDashboard();
+            
+            // Update nav buttons
+            document.getElementById('loginBtn').classList.add('hidden');
+            document.getElementById('logoutBtn').classList.remove('hidden');
+        }
+
+        function logout() {
+            currentUser.githubUser = null;
+            localStorage.removeItem('culled_github_user');
+            
+            // Downgrade to free on logout
+            setTier('free');
+            
+            document.getElementById('loginBtn').classList.remove('hidden');
+            document.getElementById('logoutBtn').classList.add('hidden');
+            
+            updateDashboard();
+        }
+
+        // =============================================
+        // DASHBOARD
+        // =============================================
+        function updateDashboard() {
+            const notSignedIn = document.getElementById('notSignedInMessage');
+            const signedIn = document.getElementById('signedInDashboard');
+            const dashboardAuth = document.getElementById('dashboardAuth');
+            const cancelSection = document.getElementById('cancelSection');
+            
+            if (!currentUser.githubUser) {
+                notSignedIn.classList.remove('hidden');
+                signedIn.classList.add('hidden');
+                dashboardAuth.innerHTML = 'not signed in';
+                return;
+            }
+            
+            // Show signed in dashboard
+            notSignedIn.classList.add('hidden');
+            signedIn.classList.remove('hidden');
+            dashboardAuth.innerHTML = `signed in as @${currentUser.githubUser.login}`;
+            
+            // Fill user info
+            document.getElementById('userAvatar').src = currentUser.githubUser.avatar_url;
+            document.getElementById('userName').textContent = currentUser.githubUser.name || currentUser.githubUser.login;
+            document.getElementById('userEmail').textContent = currentUser.githubUser.email || 'no email provided';
+            
+            // Fill subscription details
+            const tier = currentUser.tier;
+            const tierData = TIERS[tier];
+            
+            document.getElementById('currentPlanBadge').textContent = tierData.name;
+            document.getElementById('planPrice').textContent = tier === 'free' ? '$0/forever' : `$${tierData.price}/month`;
+            
+            if (currentUser.subscription) {
+                const startDate = new Date(currentUser.subscription.startDate);
+                const endDate = new Date(currentUser.subscription.expiresAt);
+                document.getElementById('subscriptionStart').textContent = `Started: ${startDate.toLocaleDateString()}`;
+                document.getElementById('subscriptionEnd').textContent = `Renews: ${endDate.toLocaleDateString()}`;
+            } else {
+                document.getElementById('subscriptionStart').textContent = 'Started: N/A';
+                document.getElementById('subscriptionEnd').textContent = 'Renews: N/A';
+            }
+            
+            // Show cancel section only for paid tiers
+            if (tier !== 'free') {
+                cancelSection.classList.remove('hidden');
+            } else {
+                cancelSection.classList.add('hidden');
+            }
+            
+            // Update usage stats
+            updateUsageStats();
+        }
+
+        function updateUsageStats() {
+            if (!currentUser.githubUser) return;
+            
+            const today = getTodayKey();
+            const usageToday = currentUser.usage[today] || 0;
+            const quota = TIERS[currentUser.tier].dailyQuota;
+            const quotaDisplay = quota === Infinity ? '∞' : quota;
+            
+            document.getElementById('usageStats').textContent = `${usageToday}/${quotaDisplay}`;
+            
+            if (quota !== Infinity) {
+                const percent = (usageToday / quota) * 100;
+                document.getElementById('usageBar').style.width = `${Math.min(percent, 100)}%`;
+            } else {
+                document.getElementById('usageBar').style.width = '0%';
+            }
+        }
+
+        function confirmCancellation() {
+            hideCancelModal();
+            showCancelModal();
+        }
+
+        function cancelSubscription() {
+            // Downgrade to free
+            setTier('free');
+            currentUser.subscription = null;
+            localStorage.removeItem('culled_subscription');
+            
+            hideCancelModal();
+            updateDashboard();
+            alert('Your subscription has been cancelled. You will be downgraded to Free tier at the end of your billing period.');
         }
 
         // =============================================
@@ -579,20 +853,23 @@ end</textarea>
                 localStorage.setItem('culled_usage', JSON.stringify(currentUser.usage));
             }
             updateUI();
+            updateUsageStats();
         }
 
         // =============================================
         // TIER MANAGEMENT
         // =============================================
         function setTier(tier) {
+            currentUser.tier = tier;
+            localStorage.setItem('culled_user_tier', tier);
+            
             if (tier === 'free') {
-                currentUser.tier = 'free';
                 currentUser.subscription = null;
-                localStorage.setItem('culled_user_tier', 'free');
                 localStorage.removeItem('culled_subscription');
-                updateUI();
-                alert('You are now on the Free tier. 10 uses per day.');
             }
+            
+            updateUI();
+            updateDashboard();
         }
 
         function purchaseTier(tier) {
@@ -601,12 +878,10 @@ end</textarea>
                 premium: 'YOUR_SELLAUTH_PREMIUM_ID'
             };
             
-            // Simulate purchase flow
             if (confirm(`Upgrade to ${tier.toUpperCase()} for $${TIERS[tier].price}/month?`)) {
-                // In production, this would redirect to SellAuth
                 window.open(`https://sellauth.com/product/${productIds[tier]}`, '_blank');
                 
-                // Simulate successful purchase (remove in production)
+                // Simulate successful purchase
                 if (confirm('Mock purchase: Simulate successful payment?')) {
                     currentUser.tier = tier;
                     currentUser.subscription = {
@@ -617,6 +892,7 @@ end</textarea>
                     localStorage.setItem('culled_user_tier', tier);
                     localStorage.setItem('culled_subscription', JSON.stringify(currentUser.subscription));
                     updateUI();
+                    updateDashboard();
                     alert(`Upgraded to ${tier.toUpperCase()}! Unlimited obfuscations activated.`);
                 }
             }
@@ -674,14 +950,13 @@ end</textarea>
                 }
             }
             
-            // Update advanced parameters visibility
+            // Update advanced parameters
             const advancedParams = document.getElementById('advancedParams');
             if (advancedParams) {
                 if (tier === 'free') {
                     advancedParams.classList.add('opacity-50', 'pointer-events-none');
                     advancedParams.classList.remove('opacity-100', 'pointer-events-auto');
                     
-                    // Gray out indicators
                     const indicators = advancedParams.querySelectorAll('span');
                     indicators.forEach(span => {
                         const dot = span.querySelector('span');
@@ -691,7 +966,6 @@ end</textarea>
                     advancedParams.classList.remove('opacity-50', 'pointer-events-none');
                     advancedParams.classList.add('opacity-100', 'pointer-events-auto');
                     
-                    // Color indicators based on tier
                     const indicators = advancedParams.querySelectorAll('span');
                     if (indicators[0]) {
                         const dot = indicators[0].querySelector('span');
@@ -708,11 +982,8 @@ end</textarea>
                 }
             }
             
-            // Update pricing buttons based on current tier
+            // Update pricing buttons
             const freeBtn = document.querySelector('.bg-zinc-800 .w-full');
-            const proBtn = document.querySelector('.bg-purple-600');
-            const premiumBtn = document.querySelector('.bg-blue-600');
-            
             if (freeBtn) {
                 freeBtn.textContent = tier === 'free' ? 'current plan' : 'downgrade to free';
                 freeBtn.onclick = () => setTier('free');
@@ -720,7 +991,7 @@ end</textarea>
         }
 
         // =============================================
-        // OBFUSCATION ENGINE (SPEED VARIES BY TIER)
+        // OBFUSCATION ENGINE
         // =============================================
         function generateRandomName() {
             return '_0x' + Math.random().toString(16).substr(2, 6);
@@ -764,7 +1035,7 @@ end</textarea>
                 processed = processed.replace(/while\s+(.+?)\s+do/g, 'while (function() return $1 end)() do');
             }
             
-            if (config.features.antiTamper && tier === 'premium') {
+            if (config.features.antiTamper) {
                 processed = `-- Anti-tamper enabled
 do
     local checksum = 0x${Math.random().toString(16).substr(2,8)}
@@ -787,11 +1058,22 @@ end
         // =============================================
         document.addEventListener('DOMContentLoaded', () => {
             updateUI();
+            updateDashboard();
+            
+            // Check if user is already logged in
+            if (currentUser.githubUser) {
+                document.getElementById('loginBtn').classList.add('hidden');
+                document.getElementById('logoutBtn').classList.remove('hidden');
+            }
             
             const obfuscateBtn = document.getElementById('obfuscateBtn');
             const inputCode = document.getElementById('inputCode');
             const outputCode = document.getElementById('outputCode');
             const copyBtn = document.getElementById('copyBtn');
+            const copyText = document.getElementById('copyText');
+            const copyIcon = document.getElementById('copyIcon');
+            const shieldIcon = document.getElementById('shieldIcon');
+            const obfuscateBtnText = document.getElementById('obfuscateBtnText');
             
             // Obfuscate button
             obfuscateBtn.addEventListener('click', () => {
@@ -806,7 +1088,6 @@ end
                     return;
                 }
                 
-                // Processing delay based on tier
                 const delay = {
                     free: 800,
                     pro: 400,
@@ -826,6 +1107,7 @@ end
                         recordObfuscation();
                     } catch (error) {
                         outputCode.textContent = '-- Error: Failed to obfuscate code';
+                        console.error(error);
                     }
                     
                     obfuscateBtn.disabled = false;
