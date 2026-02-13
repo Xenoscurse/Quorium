@@ -94,28 +94,67 @@
             color: rgba(161, 161, 170, 0.1);
         }
         
-        /* Options dropdown styling */
+        /* Options dropdown styling - FIXED */
         .options-dropdown {
             background: rgba(24, 24, 27, 0.95);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(168, 85, 247, 0.3);
             border-radius: 12px;
             box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
-            z-index: 1000;
+            z-index: 9999;
+            position: absolute;
+            right: 0;
+            top: 100%;
+            margin-top: 8px;
+            min-width: 160px;
+            display: none;
+        }
+        
+        .options-dropdown.show {
+            display: block;
         }
         
         .options-dropdown a, .options-dropdown button {
-            transition: all 0.2s ease;
+            display: block;
             width: 100%;
+            padding: 10px 16px;
             text-align: left;
+            font-size: 14px;
+            color: #d1d5db;
+            text-decoration: none;
             background: transparent;
             border: none;
             cursor: pointer;
+            transition: all 0.2s ease;
         }
         
         .options-dropdown a:hover, .options-dropdown button:hover {
             background: rgba(168, 85, 247, 0.2);
             color: white;
+        }
+        
+        .options-dropdown .divider {
+            height: 1px;
+            background: rgba(255,255,255,0.1);
+            margin: 4px 0;
+        }
+        
+        /* Ensure buttons are clickable */
+        .example-btn {
+            background: rgba(39, 39, 42, 0.8);
+            transition: all 0.2s ease;
+            cursor: pointer;
+            z-index: 10;
+            position: relative;
+        }
+        
+        .example-btn:hover {
+            background: rgba(63, 63, 70, 1);
+        }
+        
+        /* Fix for hidden class - we're not using Tailwind's hidden */
+        .hidden {
+            display: none !important;
         }
     </style>
 </head>
@@ -139,25 +178,23 @@
         <!-- ===== NAVIGATION WITH DROPDOWN ===== -->
         <nav class="fixed top-6 right-6 z-50 flex items-center gap-3">
             <!-- Options Dropdown -->
-            <div class="relative" id="optionsDropdown">
-                <button onclick="toggleDropdown()" class="px-4 py-2 bg-zinc-900/80 backdrop-blur-xl border border-zinc-800/50 rounded-xl text-sm text-zinc-300 hover:text-white hover:bg-zinc-800/80 transition-all duration-200 shadow-lg flex items-center gap-2">
+            <div class="relative" id="optionsDropdown" style="z-index: 10000;">
+                <button id="optionsButton" class="px-4 py-2 bg-zinc-900/80 backdrop-blur-xl border border-zinc-800/50 rounded-xl text-sm text-zinc-300 hover:text-white hover:bg-zinc-800/80 transition-all duration-200 shadow-lg flex items-center gap-2">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                     </svg>
                     Options
                 </button>
-                <div id="dropdownMenu" class="absolute right-0 mt-2 w-48 options-dropdown hidden" style="z-index: 1000;">
-                    <div class="py-2">
-                        <a href="#Features" onclick="closeDropdown(); return true;" class="block px-4 py-2 text-sm text-zinc-300 hover:text-white transition-colors">Features</a>
-                        <a href="#Dashboard" onclick="closeDropdown(); return true;" class="block px-4 py-2 text-sm text-zinc-300 hover:text-white transition-colors">Dashboard</a>
-                        <a href="https://github.com/Xenoscurse/Prodigy" target="_blank" onclick="closeDropdown()" class="block px-4 py-2 text-sm text-zinc-300 hover:text-white transition-colors">GitHub</a>
-                        <div class="border-t border-zinc-800/50 my-2"></div>
-                        <button onclick="closeDropdown(); showLoginModal();" class="w-full text-left px-4 py-2 text-sm text-zinc-300 hover:text-white hover:bg-purple-500/20 transition-colors">Sign In</button>
-                    </div>
+                <div id="dropdownMenu" class="options-dropdown">
+                    <a href="#" data-target="features">Features</a>
+                    <a href="#" data-target="dashboard">Dashboard</a>
+                    <a href="https://github.com/Xenoscurse/Prodigy" target="_blank">GitHub</a>
+                    <div class="divider"></div>
+                    <button id="signInBtn">Sign In</button>
                 </div>
             </div>
             
-            <button id="logoutBtn" onclick="logout()" class="hidden px-5 py-2 bg-zinc-700 text-white text-sm font-medium rounded-xl hover:bg-zinc-600 transition-all duration-200 shadow-lg">
+            <button id="logoutBtn" class="hidden px-5 py-2 bg-zinc-700 text-white text-sm font-medium rounded-xl hover:bg-zinc-600 transition-all duration-200 shadow-lg">
                 Sign Out
             </button>
         </nav>
@@ -198,7 +235,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                         </svg>
                     </button>
-                    <a href="#Dashboard" class="px-6 py-3 bg-zinc-900/50 backdrop-blur-sm border border-zinc-800/50 font-medium rounded-xl hover:bg-zinc-800/50 transition-all duration-200">
+                    <a href="#" onclick="document.getElementById('dashboard').scrollIntoView({ behavior: 'smooth' }); return false;" class="px-6 py-3 bg-zinc-900/50 backdrop-blur-sm border border-zinc-800/50 font-medium rounded-xl hover:bg-zinc-800/50 transition-all duration-200">
                         View Dashboard
                     </a>
                 </div>
@@ -255,12 +292,12 @@
                                       spellcheck="false"></textarea>
                         </div>
                         <div class="absolute bottom-4 left-4 flex gap-2 flex-wrap">
-                            <button onclick="setExample('lua')" class="px-3 py-1.5 bg-zinc-800/80 hover:bg-zinc-700 rounded-lg text-xs text-zinc-300 transition-colors">Lua</button>
-                            <button onclick="setExample('javascript')" class="px-3 py-1.5 bg-zinc-800/80 hover:bg-zinc-700 rounded-lg text-xs text-zinc-300 transition-colors">JavaScript</button>
-                            <button onclick="setExample('python')" class="px-3 py-1.5 bg-zinc-800/80 hover:bg-zinc-700 rounded-lg text-xs text-zinc-300 transition-colors">Python</button>
-                            <button onclick="setExample('java')" class="px-3 py-1.5 bg-zinc-800/80 hover:bg-zinc-700 rounded-lg text-xs text-zinc-300 transition-colors">Java</button>
-                            <button onclick="setExample('csharp')" class="px-3 py-1.5 bg-zinc-800/80 hover:bg-zinc-700 rounded-lg text-xs text-zinc-300 transition-colors">C#</button>
-                            <button onclick="setExample('cpp')" class="px-3 py-1.5 bg-zinc-800/80 hover:bg-zinc-700 rounded-lg text-xs text-zinc-300 transition-colors">C++</button>
+                            <button class="example-btn px-3 py-1.5 bg-zinc-800/80 hover:bg-zinc-700 rounded-lg text-xs text-zinc-300 transition-colors" data-lang="lua">Lua</button>
+                            <button class="example-btn px-3 py-1.5 bg-zinc-800/80 hover:bg-zinc-700 rounded-lg text-xs text-zinc-300 transition-colors" data-lang="javascript">JavaScript</button>
+                            <button class="example-btn px-3 py-1.5 bg-zinc-800/80 hover:bg-zinc-700 rounded-lg text-xs text-zinc-300 transition-colors" data-lang="python">Python</button>
+                            <button class="example-btn px-3 py-1.5 bg-zinc-800/80 hover:bg-zinc-700 rounded-lg text-xs text-zinc-300 transition-colors" data-lang="java">Java</button>
+                            <button class="example-btn px-3 py-1.5 bg-zinc-800/80 hover:bg-zinc-700 rounded-lg text-xs text-zinc-300 transition-colors" data-lang="csharp">C#</button>
+                            <button class="example-btn px-3 py-1.5 bg-zinc-800/80 hover:bg-zinc-700 rounded-lg text-xs text-zinc-300 transition-colors" data-lang="cpp">C++</button>
                         </div>
                     </div>
 
@@ -320,7 +357,7 @@
         </section>
 
         <!-- ===== FEATURES SECTION ===== -->
-        <section id="Features" class="max-w-7xl mx-auto px-6 py-20">
+        <section id="features" class="max-w-7xl mx-auto px-6 py-20">
             <div class="text-center mb-16">
                 <h2 class="text-5xl font-bold mb-4 bg-gradient-to-b from-white to-purple-200 bg-clip-text text-transparent">
                     Why Choose Prodigy?
@@ -372,7 +409,7 @@
         </section>
 
         <!-- ===== DASHBOARD ===== -->
-        <section id="Dashboard" class="max-w-7xl mx-auto px-6 py-20">
+        <section id="dashboard" class="max-w-7xl mx-auto px-6 py-20">
             <div class="bg-zinc-900/50 backdrop-blur-xl border border-zinc-800/50 rounded-3xl p-8 shadow-2xl">
                 <div class="flex items-center justify-between mb-8">
                     <h2 class="text-3xl font-bold bg-gradient-to-b from-white to-purple-200 bg-clip-text text-transparent">
@@ -390,7 +427,7 @@
                     </svg>
                     <h3 class="text-xl text-white mb-2">Sign In to Track Your Usage</h3>
                     <p class="text-zinc-400 mb-6">View your obfuscation history and manage preferences</p>
-                    <button onclick="showLoginModal()" class="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-xl transition-all duration-200">
+                    <button id="dashboardSignInBtn" class="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-xl transition-all duration-200">
                         Sign In With Discord
                     </button>
                 </div>
@@ -454,8 +491,8 @@
                     <nav>
                         <ul class="flex items-center gap-6 text-sm text-zinc-400">
                             <li><a href="https://github.com/Xenoscurse/Prodigy" target="_blank" class="hover:text-white transition-colors duration-200">GitHub</a></li>
-                            <li><a href="#Features" class="hover:text-white transition-colors duration-200">Features</a></li>
-                            <li><a href="#Dashboard" class="hover:text-white transition-colors duration-200">Dashboard</a></li>
+                            <li><a href="#features" class="hover:text-white transition-colors duration-200">Features</a></li>
+                            <li><a href="#dashboard" class="hover:text-white transition-colors duration-200">Dashboard</a></li>
                         </ul>
                     </nav>
                 </div>
@@ -477,7 +514,7 @@
             
             <p class="text-zinc-400 mb-6 text-sm">Sign in with Discord to track your usage and access all features.</p>
             
-            <button onclick="loginWithDiscord()" class="w-full py-3 bg-[#5865F2] hover:bg-[#4752C4] text-white rounded-xl transition-all duration-200 flex items-center justify-center gap-3">
+            <button id="modalLoginBtn" class="w-full py-3 bg-[#5865F2] hover:bg-[#4752C4] text-white rounded-xl transition-all duration-200 flex items-center justify-center gap-3">
                 <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .078-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .079.01c.12.098.246.198.372.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.06.06 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.419 0 1.334-.956 2.419-2.157 2.419zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.419 0 1.334-.947 2.419-2.157 2.419z"/>
                 </svg>
@@ -492,62 +529,70 @@
 
     <script>
         // =============================================
-        // ===== DROPDOWN FUNCTIONS =====
+        // ===== SIMPLIFIED WORKING VERSION =====
         // =============================================
         
-        function toggleDropdown() {
-            const menu = document.getElementById('dropdownMenu');
-            if (menu) {
-                menu.classList.toggle('hidden');
-            }
-        }
-        
-        function closeDropdown() {
-            const menu = document.getElementById('dropdownMenu');
-            if (menu) {
-                menu.classList.add('hidden');
-            }
-        }
-        
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function(event) {
-            const dropdown = document.getElementById('optionsDropdown');
-            const menu = document.getElementById('dropdownMenu');
+        // Make sure DOM is fully loaded before attaching events
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded - initializing...');
             
-            if (dropdown && menu && !dropdown.contains(event.target) && !menu.classList.contains('hidden')) {
-                menu.classList.add('hidden');
+            // ===== DROPDOWN FUNCTIONALITY =====
+            const optionsButton = document.getElementById('optionsButton');
+            const dropdownMenu = document.getElementById('dropdownMenu');
+            
+            if (optionsButton && dropdownMenu) {
+                // Toggle dropdown on button click
+                optionsButton.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log('Options button clicked');
+                    
+                    if (dropdownMenu.style.display === 'block') {
+                        dropdownMenu.style.display = 'none';
+                    } else {
+                        dropdownMenu.style.display = 'block';
+                    }
+                });
+                
+                // Close dropdown when clicking outside
+                document.addEventListener('click', function(e) {
+                    if (!optionsButton.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                        dropdownMenu.style.display = 'none';
+                    }
+                });
+                
+                // Handle dropdown item clicks
+                const dropdownLinks = dropdownMenu.querySelectorAll('a, button');
+                dropdownLinks.forEach(item => {
+                    item.addEventListener('click', function(e) {
+                        console.log('Dropdown item clicked:', this.textContent);
+                        dropdownMenu.style.display = 'none';
+                        
+                        // Handle special actions
+                        if (this.textContent === 'Features') {
+                            e.preventDefault();
+                            document.getElementById('features').scrollIntoView({ behavior: 'smooth' });
+                        } else if (this.textContent === 'Dashboard') {
+                            e.preventDefault();
+                            document.getElementById('dashboard').scrollIntoView({ behavior: 'smooth' });
+                        } else if (this.textContent === 'Sign In') {
+                            e.preventDefault();
+                            document.getElementById('loginModal').style.display = 'flex';
+                        }
+                    });
+                });
             }
-        });
-
-        // =============================================
-        // ===== EASY EDIT CONFIGURATION =====
-        // =============================================
-        
-        // ----- DISCORD OAUTH SETTINGS -----
-        const DISCORD_CONFIG = {
-            CLIENT_ID: '1464021428725747733',
-            REDIRECT_URI: 'https://xenoscurse.github.io/Prodigy/callback.html',
-            SCOPES: 'identify email'
-        };
-
-        // ----- ALL FEATURES FREE - NO PAYMENTS -----
-        const FEATURES = {
-            unlimited: true,
-            dailyQuota: Infinity,
-            processingSpeed: 'ultra',
-            languages: ['lua', 'javascript', 'python', 'java', 'c#', 'c++', 'ruby', 'php', 'go', 'rust', 'swift', 'kotlin', 'typescript'],
-            features: {
-                controlFlow: true,
-                antiTamper: true,
-                junkCode: true,
-                stringEncryption: true,
-                variableRenaming: true
-            }
-        };
-
-        // ----- COMPLETE CODE EXAMPLES FOR ALL LANGUAGES -----
-        const EXAMPLES = {
-            lua: `-- Lua Example
+            
+            // ===== LANGUAGE EXAMPLE BUTTONS =====
+            const exampleButtons = document.querySelectorAll('[data-lang]');
+            const inputCode = document.getElementById('inputCode');
+            const languageSelect = document.getElementById('languageSelect');
+            const inputFileName = document.getElementById('inputFileName');
+            const outputFileName = document.getElementById('outputFileName');
+            
+            // Define examples
+            const EXAMPLES = {
+                lua: `-- Lua Example
 local player = game.Players.LocalPlayer
 local message = "Hello World"
 print(message)
@@ -561,7 +606,7 @@ local weapons = {"Sword", "Bow", "Staff"}
 for i, weapon in ipairs(weapons) do
     print("Weapon " .. i .. ": " .. weapon)
 end`,
-            javascript: `// JavaScript Example
+                javascript: `// JavaScript Example
 const player = game.Players.LocalPlayer;
 const message = "Hello World";
 console.log(message);
@@ -575,7 +620,7 @@ const weapons = ["Sword", "Bow", "Staff"];
 weapons.forEach((weapon, index) => {
     console.log(\`Weapon \${index + 1}: \${weapon}\`);
 });`,
-            python: `# Python Example
+                python: `# Python Example
 import math
 
 def calculate_damage(damage, multiplier=1):
@@ -588,7 +633,7 @@ print(message)
 weapons = ["Sword", "Bow", "Staff"]
 for i, weapon in enumerate(weapons, 1):
     print(f"Weapon {i}: {weapon}")`,
-            java: `// Java Example
+                java: `// Java Example
 public class DamageCalculator {
     private String message = "Hello World";
     
@@ -604,7 +649,7 @@ public class DamageCalculator {
         }
     }
 }`,
-            csharp: `// C# Example
+                csharp: `// C# Example
 using System;
 
 public class DamageCalculator {
@@ -622,7 +667,7 @@ public class DamageCalculator {
         }
     }
 }`,
-            cpp: `// C++ Example
+                cpp: `// C++ Example
 #include <iostream>
 #include <string>
 #include <vector>
@@ -643,384 +688,116 @@ public:
             std::cout << "Weapon " << (i + 1) << ": " << weapons[i] << std::endl;
         }
     }
-};`,
-            ruby: `# Ruby Example
-class DamageCalculator
-    def initialize
-        @message = "Hello World"
-    end
-    
-    def calculate_damage(damage, multiplier = 1)
-        damage * multiplier
-    end
-    
-    # Example with array
-    def list_weapons
-        weapons = ["Sword", "Bow", "Staff"]
-        weapons.each_with_index do |weapon, index|
-            puts "Weapon #{index + 1}: #{weapon}"
-        end
-    end
-end
-
-puts "Hello World"`,
-            php: `<?php
-// PHP Example
-class DamageCalculator {
-    private $message = "Hello World";
-    
-    public function calculateDamage($damage, $multiplier = 1) {
-        return $damage * $multiplier;
-    }
-    
-    // Example with array
-    public function listWeapons() {
-        $weapons = ["Sword", "Bow", "Staff"];
-        foreach ($weapons as $index => $weapon) {
-            echo "Weapon " . ($index + 1) . ": " . $weapon . "\n";
-        }
-    }
-}
-
-echo "Hello World\n";
-?>`,
-            go: `// Go Example
-package main
-
-import "fmt"
-
-type DamageCalculator struct {
-    message string
-}
-
-func NewDamageCalculator() *DamageCalculator {
-    return &DamageCalculator{message: "Hello World"}
-}
-
-func (d *DamageCalculator) CalculateDamage(damage, multiplier int) int {
-    if multiplier == 0 {
-        multiplier = 1
-    }
-    return damage * multiplier
-}
-
-// Example with slice
-func listWeapons() {
-    weapons := []string{"Sword", "Bow", "Staff"}
-    for i, weapon := range weapons {
-        fmt.Printf("Weapon %d: %s\n", i+1, weapon)
-    }
-}
-
-func main() {
-    fmt.Println("Hello World")
-    listWeapons()
-}`,
-            rust: `// Rust Example
-struct DamageCalculator {
-    message: String,
-}
-
-impl DamageCalculator {
-    fn new() -> Self {
-        DamageCalculator {
-            message: "Hello World".to_string(),
-        }
-    }
-    
-    fn calculate_damage(&self, damage: i32, multiplier: i32) -> i32 {
-        damage * if multiplier == 0 { 1 } else { multiplier }
-    }
-}
-
-// Example with vector
-fn list_weapons() {
-    let weapons = vec!["Sword", "Bow", "Staff"];
-    for (i, weapon) in weapons.iter().enumerate() {
-        println!("Weapon {}: {}", i + 1, weapon);
-    }
-}
-
-fn main() {
-    println!("Hello World");
-    list_weapons();
-}`,
-            swift: `// Swift Example
-class DamageCalculator {
-    let message = "Hello World"
-    
-    func calculateDamage(damage: Int, multiplier: Int = 1) -> Int {
-        return damage * multiplier
-    }
-}
-
-// Example with array
-func listWeapons() {
-    let weapons = ["Sword", "Bow", "Staff"]
-    for (index, weapon) in weapons.enumerated() {
-        print("Weapon \(index + 1): \(weapon)")
-    }
-}
-
-print("Hello World")
-listWeapons()`,
-            kotlin: `// Kotlin Example
-class DamageCalculator {
-    val message = "Hello World"
-    
-    fun calculateDamage(damage: Int, multiplier: Int = 1): Int {
-        return damage * multiplier
-    }
-}
-
-// Example with array
-fun listWeapons() {
-    val weapons = arrayOf("Sword", "Bow", "Staff")
-    weapons.forEachIndexed { index, weapon ->
-        println("Weapon ${index + 1}: $weapon")
-    }
-}
-
-fun main() {
-    println("Hello World")
-    listWeapons()
-}`,
-            typescript: `// TypeScript Example
-interface DamageCalculator {
-    message: string;
-    calculateDamage(damage: number, multiplier?: number): number;
-}
-
-class Calculator implements DamageCalculator {
-    message: string = "Hello World";
-    
-    calculateDamage(damage: number, multiplier: number = 1): number {
-        return damage * multiplier;
-    }
-}
-
-// Example with array
-function listWeapons(): void {
-    const weapons: string[] = ["Sword", "Bow", "Staff"];
-    weapons.forEach((weapon, index) => {
-        console.log(`Weapon ${index + 1}: ${weapon}`);
-    });
-}
-
-console.log("Hello World");
-listWeapons();`
-        };
-
-        // =============================================
-        // ===== USER STATE MANAGEMENT =====
-        // =============================================
-        
-        const STORAGE_KEYS = {
-            USER_ID: 'prodigy_user_id',
-            USAGE: 'prodigy_usage',
-            DISCORD_USER: 'prodigy_discord_user'
-        };
-
-        let currentUser = {
-            id: localStorage.getItem(STORAGE_KEYS.USER_ID) || 'anonymous_' + Math.random().toString(36).substr(2, 9),
-            usage: JSON.parse(localStorage.getItem(STORAGE_KEYS.USAGE) || '{}'),
-            discordUser: JSON.parse(localStorage.getItem(STORAGE_KEYS.DISCORD_USER) || 'null')
-        };
-
-        if (!localStorage.getItem(STORAGE_KEYS.USER_ID)) {
-            localStorage.setItem(STORAGE_KEYS.USER_ID, currentUser.id);
-        }
-
-        // ----- DISCORD OAUTH -----
-        window.showLoginModal = function() {
-            document.getElementById('loginModal').style.display = 'flex';
-        };
-
-        window.hideLoginModal = function() {
-            document.getElementById('loginModal').style.display = 'none';
-        };
-
-        window.loginWithDiscord = function() {
-            const redirectUri = encodeURIComponent(DISCORD_CONFIG.REDIRECT_URI);
-            const scope = encodeURIComponent(DISCORD_CONFIG.SCOPES);
-            window.location.href = `https://discord.com/api/oauth2/authorize?client_id=${DISCORD_CONFIG.CLIENT_ID}&redirect_uri=${redirectUri}&response_type=token&scope=${scope}`;
-        };
-
-        window.logout = function() {
-            currentUser.discordUser = null;
-            localStorage.removeItem(STORAGE_KEYS.DISCORD_USER);
-            document.getElementById('logoutBtn').classList.add('hidden');
-            window.location.reload();
-        };
-
-        // ----- CHECK FOR DISCORD TOKEN -----
-        (function checkForToken() {
-            const hash = window.location.hash.substring(1);
-            if (hash) {
-                const params = new URLSearchParams(hash);
-                const accessToken = params.get('access_token');
-                if (accessToken) {
-                    window.location.hash = '';
-                    fetch('https://discord.com/api/users/@me', {
-                        headers: { 'Authorization': `Bearer ${accessToken}` }
-                    })
-                    .then(res => res.json())
-                    .then(user => {
-                        const discordUser = {
-                            id: user.id,
-                            username: user.username,
-                            global_name: user.global_name || user.username,
-                            email: user.email || `${user.username}@discord.local`,
-                            avatar: user.avatar,
-                            discriminator: user.discriminator || '0'
-                        };
-                        localStorage.setItem(STORAGE_KEYS.DISCORD_USER, JSON.stringify(discordUser));
-                        localStorage.setItem(STORAGE_KEYS.USER_ID, user.id);
-                        window.location.reload();
-                    })
-                    .catch(() => {});
+};`
+            };
+            
+            // Function to set example
+            function setExample(lang) {
+                console.log('Setting example for:', lang);
+                if (inputCode && EXAMPLES[lang]) {
+                    inputCode.value = EXAMPLES[lang];
+                    if (languageSelect) languageSelect.value = lang;
+                    if (inputFileName) inputFileName.textContent = `Input.${lang}`;
+                    if (outputFileName) outputFileName.textContent = `Output.${lang}`;
                 }
             }
-        })();
-
-        // ----- DASHBOARD -----
-        function updateDashboard() {
-            const notSignedIn = document.getElementById('notSignedInMessage');
-            const signedIn = document.getElementById('signedInDashboard');
-            const dashboardAuth = document.getElementById('dashboardAuth');
             
-            if (!currentUser.discordUser) {
-                notSignedIn.classList.remove('hidden');
-                signedIn.classList.add('hidden');
-                dashboardAuth.innerHTML = 'Not Signed In';
-                return;
-            }
-            
-            notSignedIn.classList.add('hidden');
-            signedIn.classList.remove('hidden');
-            dashboardAuth.innerHTML = `Signed in as @${currentUser.discordUser.username}`;
-            
-            const user = currentUser.discordUser;
-            const avatarUrl = user.avatar 
-                ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`
-                : `https://cdn.discordapp.com/embed/avatars/${parseInt(user.discriminator) % 5}.png`;
-            
-            document.getElementById('userAvatar').src = avatarUrl;
-            document.getElementById('userName').textContent = user.global_name || user.username;
-            document.getElementById('userEmail').textContent = user.email || 'No Email Provided';
-            document.getElementById('discordTag').innerHTML = `Discord · ${user.username}#${user.discriminator}`;
-            
-            updateUsageStats();
-        }
-
-        function updateUsageStats() {
-            const today = getTodayKey();
-            const usageToday = currentUser.usage[today] || 0;
-            document.getElementById('usageStats').textContent = usageToday;
-        }
-
-        // ----- USAGE TRACKING -----
-        function getTodayKey() {
-            return new Date().toISOString().split('T')[0];
-        }
-
-        function recordObfuscation() {
-            const today = getTodayKey();
-            currentUser.usage[today] = (currentUser.usage[today] || 0) + 1;
-            localStorage.setItem(STORAGE_KEYS.USAGE, JSON.stringify(currentUser.usage));
-            updateUsageStats();
-        }
-
-        // ----- SET EXAMPLE -----
-        window.setExample = function(lang) {
-            const input = document.getElementById('inputCode');
-            if (input && EXAMPLES[lang]) {
-                input.value = EXAMPLES[lang];
-                const select = document.getElementById('languageSelect');
-                if (select) {
-                    select.value = lang;
-                }
-                updateFileNames(lang);
-            }
-        };
-
-        function updateFileNames(lang) {
-            const inputFileName = document.getElementById('inputFileName');
-            const outputFileName = document.getElementById('outputFileName');
-            if (inputFileName) inputFileName.textContent = `Input.${lang}`;
-            if (outputFileName) outputFileName.textContent = `Output.${lang}`;
-        }
-
-        // ----- UI UPDATE (All features enabled) -----
-        function updateUI() {
-            const langSelect = document.getElementById('languageSelect');
-            if (langSelect) {
-                const currentValue = langSelect.value;
-                langSelect.innerHTML = '';
-                FEATURES.languages.forEach(lang => {
-                    const option = document.createElement('option');
-                    option.value = lang.toLowerCase();
-                    let displayName = lang.charAt(0).toUpperCase() + lang.slice(1);
-                    displayName = displayName.replace('c#', 'C#').replace('c++', 'C++');
-                    option.textContent = displayName;
-                    langSelect.appendChild(option);
+            // Attach click handlers to example buttons
+            exampleButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const lang = this.getAttribute('data-lang');
+                    console.log('Example button clicked:', lang);
+                    setExample(lang);
                 });
-                if (FEATURES.languages.map(l => l.toLowerCase()).includes(currentValue)) {
-                    langSelect.value = currentValue;
-                    if (EXAMPLES[currentValue]) {
-                        setExample(currentValue);
+            });
+            
+            // Language select change handler
+            if (languageSelect) {
+                languageSelect.addEventListener('change', function(e) {
+                    const lang = this.value;
+                    console.log('Language select changed:', lang);
+                    setExample(lang);
+                });
+            }
+            
+            // ===== LOGIN MODAL =====
+            const loginModal = document.getElementById('loginModal');
+            const signInBtn = document.getElementById('signInBtn');
+            const dashboardSignInBtn = document.getElementById('dashboardSignInBtn');
+            const modalLoginBtn = document.getElementById('modalLoginBtn');
+            
+            function showLoginModal() {
+                if (loginModal) loginModal.style.display = 'flex';
+            }
+            
+            function hideLoginModal() {
+                if (loginModal) loginModal.style.display = 'none';
+            }
+            
+            // Make functions global for onclick handlers
+            window.showLoginModal = showLoginModal;
+            window.hideLoginModal = hideLoginModal;
+            
+            if (signInBtn) {
+                signInBtn.addEventListener('click', showLoginModal);
+            }
+            
+            if (dashboardSignInBtn) {
+                dashboardSignInBtn.addEventListener('click', showLoginModal);
+            }
+            
+            if (modalLoginBtn) {
+                modalLoginBtn.addEventListener('click', function() {
+                    const redirectUri = encodeURIComponent('https://xenoscurse.github.io/Prodigy/callback.html');
+                    window.location.href = `https://discord.com/api/oauth2/authorize?client_id=1464021428725747733&redirect_uri=${redirectUri}&response_type=token&scope=identify%20email`;
+                });
+            }
+            
+            // ===== OBFUSCATION =====
+            const obfuscateBtn = document.getElementById('obfuscateBtn');
+            const outputCode = document.getElementById('outputCode');
+            const copyBtn = document.getElementById('copyBtn');
+            
+            function generateRandomName() {
+                return '_0x' + Math.random().toString(16).substr(2, 6);
+            }
+            
+            function obfuscateCode(code) {
+                let processed = code;
+                
+                // Variable renaming
+                const varMap = new Map();
+                const allMatches = code.match(/\b[a-zA-Z_][a-zA-Z0-9_]*\b/g) || [];
+                const keywords = new Set(['and','break','do','else','elseif','end','false','for','function','goto','if','in','local','nil','not','or','repeat','return','then','true','until','while','const','let','var','class','import','export','public','private','static','void','int','string','float','double','bool']);
+                
+                allMatches.forEach(v => {
+                    if (!keywords.has(v) && !v.startsWith('_0x') && !varMap.has(v)) {
+                        varMap.set(v, generateRandomName());
                     }
-                } else {
-                    langSelect.value = FEATURES.languages[0];
-                    setExample(FEATURES.languages[0]);
+                });
+                
+                const sortedEntries = Array.from(varMap.entries()).sort((a, b) => b[0].length - a[0].length);
+                sortedEntries.forEach(([original, replacement]) => {
+                    const regex = new RegExp(`\\b${original.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'g');
+                    processed = processed.replace(regex, replacement);
+                });
+                
+                // String encryption
+                processed = processed.replace(/(["'])(?:(?=(\\?))\2.)*?\1/g, (match) => {
+                    return `(function() return ${match} end)()`;
+                });
+                
+                // Junk code
+                for (let i = 0; i < 3; i++) {
+                    processed = `local ${generateRandomName()}=${Math.floor(Math.random()*9999)}\n` + processed;
                 }
-            }
-        }
-
-        // =============================================
-        // ===== OBFUSCATION ENGINE =====
-        // =============================================
-        
-        function generateRandomName() {
-            return '_0x' + Math.random().toString(16).substr(2, 6);
-        }
-
-        function obfuscateCode(code) {
-            let processed = code;
-            
-            // Variable renaming
-            const varMap = new Map();
-            const allMatches = code.match(/\b[a-zA-Z_][a-zA-Z0-9_]*\b/g) || [];
-            const keywords = new Set(['and','break','do','else','elseif','end','false','for','function','goto','if','in','local','nil','not','or','repeat','return','then','true','until','while','const','let','var','class','import','export','public','private','static','void','int','string','float','double','bool']);
-            
-            allMatches.forEach(v => {
-                if (!keywords.has(v) && !v.startsWith('_0x') && !varMap.has(v)) {
-                    varMap.set(v, generateRandomName());
-                }
-            });
-            
-            const sortedEntries = Array.from(varMap.entries()).sort((a, b) => b[0].length - a[0].length);
-            sortedEntries.forEach(([original, replacement]) => {
-                const regex = new RegExp(`\\b${original.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'g');
-                processed = processed.replace(regex, replacement);
-            });
-            
-            // String encryption
-            processed = processed.replace(/(["'])(?:(?=(\\?))\2.)*?\1/g, (match) => {
-                return `(function() return ${match} end)()`;
-            });
-            
-            // Junk code injection
-            for (let i = 0; i < 3; i++) {
-                processed = `local ${generateRandomName()}=${Math.floor(Math.random()*9999)}\n` + processed;
-            }
-            
-            // Control flow obfuscation
-            processed = processed.replace(/if\s+(.+?)\s+then/g, 'if (function() return $1 end)() then');
-            processed = processed.replace(/while\s+(.+?)\s+do/g, 'while (function() return $1 end)() do');
-            
-            // Anti-tamper
-            processed = `-- Anti-Tamper Enabled
+                
+                // Control flow
+                processed = processed.replace(/if\s+(.+?)\s+then/g, 'if (function() return $1 end)() then');
+                
+                // Anti-tamper
+                processed = `-- Anti-Tamper Enabled
 do
     local checksum = 0x${Math.random().toString(16).substr(2,8)}
     local function verify() 
@@ -1032,83 +809,60 @@ do
 end
 
 ` + processed;
-            
-            return processed;
-        }
-
-        // ----- EVENT LISTENERS -----
-        document.addEventListener('DOMContentLoaded', () => {
-            updateUI();
-            updateDashboard();
-            
-            if (currentUser.discordUser) {
-                document.getElementById('logoutBtn').classList.remove('hidden');
+                
+                return processed;
             }
             
-            const obfuscateBtn = document.getElementById('obfuscateBtn');
-            const inputCode = document.getElementById('inputCode');
-            const outputCode = document.getElementById('outputCode');
-            const copyBtn = document.getElementById('copyBtn');
-            const copyText = document.getElementById('copyText');
-            const copyIcon = document.getElementById('copyIcon');
-            const shieldIcon = document.getElementById('shieldIcon');
-            const obfuscateBtnText = document.getElementById('obfuscateBtnText');
-            
-            if (obfuscateBtn) {
-                obfuscateBtn.addEventListener('click', () => {
+            if (obfuscateBtn && inputCode && outputCode) {
+                obfuscateBtn.addEventListener('click', function() {
                     const code = inputCode.value.trim();
                     if (!code) {
                         alert('Please paste some code to obfuscate!');
                         return;
                     }
                     
-                    obfuscateBtn.disabled = true;
-                    obfuscateBtnText.textContent = 'Obfuscating...';
-                    shieldIcon.classList.add('animate-spin');
+                    this.disabled = true;
+                    const btnText = this.querySelector('span');
+                    if (btnText) btnText.textContent = 'Obfuscating...';
                     
                     setTimeout(() => {
                         try {
                             const obfuscated = obfuscateCode(code);
                             outputCode.textContent = obfuscated;
-                            copyBtn.classList.remove('hidden');
-                            copyBtn.classList.add('flex');
-                            recordObfuscation();
+                            if (copyBtn) {
+                                copyBtn.classList.remove('hidden');
+                                copyBtn.classList.add('flex');
+                            }
                         } catch (error) {
                             outputCode.textContent = '-- Error: Failed to obfuscate code';
                         }
-                        obfuscateBtn.disabled = false;
-                        obfuscateBtnText.textContent = 'Obfuscate';
-                        shieldIcon.classList.remove('animate-spin');
+                        
+                        this.disabled = false;
+                        if (btnText) btnText.textContent = 'Obfuscate';
                     }, 500);
                 });
             }
             
-            if (copyBtn) {
-                copyBtn.addEventListener('click', async () => {
+            // Copy button
+            if (copyBtn && outputCode) {
+                copyBtn.addEventListener('click', async function() {
                     const text = outputCode.textContent;
                     if (text && !text.includes('Click "obfuscate"')) {
                         await navigator.clipboard.writeText(text);
-                        copyText.textContent = 'Copied!';
-                        copyIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>';
+                        const copyText = document.getElementById('copyText');
+                        const copyIcon = document.getElementById('copyIcon');
+                        if (copyText) copyText.textContent = 'Copied!';
+                        if (copyIcon) copyIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>';
+                        
                         setTimeout(() => {
-                            copyText.textContent = 'Copy';
-                            copyIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>';
+                            if (copyText) copyText.textContent = 'Copy';
+                            if (copyIcon) copyIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>';
                         }, 2000);
                     }
                 });
             }
             
-            const langSelect = document.getElementById('languageSelect');
-            
-            if (langSelect) {
-                langSelect.addEventListener('change', (e) => {
-                    const lang = e.target.value;
-                    updateFileNames(lang);
-                    if (EXAMPLES[lang]) {
-                        setExample(lang);
-                    }
-                });
-            }
+            console.log('Initialization complete');
         });
     </script>
 </body>
