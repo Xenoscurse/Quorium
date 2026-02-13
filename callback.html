@@ -5,10 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Culled - Discord Authentication</title>
     <style>
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        
+        @keyframes spin { to { transform: rotate(360deg); } }
         body {
             margin: 0;
             padding: 0;
@@ -20,7 +17,6 @@
             justify-content: center;
             min-height: 100vh;
         }
-        
         .background {
             position: fixed;
             top: 0;
@@ -30,7 +26,6 @@
             z-index: -1;
             background: url('https://i.pinimg.com/1200x/d4/aa/20/d4aa2073fe6345ef4bc47350e9e94358.jpg') center/cover;
         }
-        
         .overlay {
             position: fixed;
             top: 0;
@@ -41,7 +36,6 @@
             backdrop-filter: blur(5px);
             z-index: -1;
         }
-        
         .card {
             background: rgba(24, 24, 27, 0.8);
             backdrop-filter: blur(10px);
@@ -53,7 +47,6 @@
             text-align: center;
             box-shadow: 0 20px 35px -8px rgba(0, 0, 0, 0.5);
         }
-        
         .loader {
             width: 48px;
             height: 48px;
@@ -63,10 +56,8 @@
             animation: spin 1s ease-in-out infinite;
             margin: 20px auto;
         }
-        
         .success { color: #22c55e; }
         .error { color: #ef4444; }
-        
         .button {
             background: #5865F2;
             color: white;
@@ -81,7 +72,6 @@
             display: inline-block;
             margin-top: 20px;
         }
-        
         .button:hover {
             background: #4752C4;
             transform: translateY(-2px);
@@ -109,17 +99,15 @@
 
     <script>
         // =============================================
-        // COMPLETE DISCORD CALLBACK HANDLER
+        // DISCORD OAUTH - HANDLES BOTH CODE AND TOKEN FLOWS
         // =============================================
-        
-        // Get the code from URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const code = urlParams.get('code');
-        const error = urlParams.get('error');
         
         const statusDiv = document.getElementById('status');
         
-        // If Discord returned an error
+        // Check for error in URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const error = urlParams.get('error');
+        
         if (error) {
             statusDiv.innerHTML = `
                 <div style="font-size: 48px; margin-bottom: 16px;">❌</div>
@@ -128,63 +116,97 @@
                 <a href="https://xenoscurse.github.io/Culled/" class="button">Return to Culled</a>
             `;
         } 
-        // If no code in URL
-        else if (!code) {
-            statusDiv.innerHTML = `
-                <div style="font-size: 48px; margin-bottom: 16px;">🔗</div>
-                <h2 style="color: #f59e0b; margin-bottom: 16px;">No Authorization Code</h2>
-                <p style="color: #a1a1aa; margin-bottom: 24px;">Please sign in through Discord.</p>
-                <a href="https://xenoscurse.github.io/Culled/" class="button">Return to Culled</a>
-            `;
-        } 
-        // We have a code - log the user in
-        else {
-            // Simulate network delay
-            setTimeout(() => {
-                try {
-                    // Create a unique user ID
-                    const userId = Math.floor(Math.random() * 100000000000000000).toString();
-                    const username = 'user_' + Math.floor(Math.random() * 10000);
-                    
-                    // Create mock Discord user
+        // Check for TOKEN flow (response_type=token)
+        else if (window.location.hash) {
+            const hash = window.location.hash.substring(1);
+            const hashParams = new URLSearchParams(hash);
+            const accessToken = hashParams.get('access_token');
+            
+            if (accessToken) {
+                // Get user info from Discord
+                fetch('https://discord.com/api/users/@me', {
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`
+                    }
+                })
+                .then(response => response.json())
+                .then(userData => {
                     const discordUser = {
-                        id: userId,
-                        username: username,
-                        global_name: 'Culled User',
-                        email: 'user@discord.com',
-                        discriminator: '0000',
-                        avatar: null,
-                        locale: 'en-US'
+                        id: userData.id,
+                        username: userData.username,
+                        global_name: userData.global_name || userData.username,
+                        email: userData.email || `${userData.username}@discord.local`,
+                        avatar: userData.avatar,
+                        discriminator: userData.discriminator || '0',
+                        accent_color: userData.accent_color
                     };
-                    
-                    // Save to localStorage
+
                     localStorage.setItem('culled_discord_user', JSON.stringify(discordUser));
                     localStorage.setItem('culled_user_tier', 'free');
-                    localStorage.setItem('culled_user_id', userId);
-                    
-                    // Show success
+                    localStorage.setItem('culled_user_id', discordUser.id);
+
                     statusDiv.innerHTML = `
                         <div style="font-size: 64px; margin-bottom: 16px;">✅</div>
-                        <h2 class="success">Successfully Signed In!</h2>
-                        <p style="color: white; margin-bottom: 8px;">Welcome, ${discordUser.global_name}!</p>
-                        <p style="color: #a1a1aa; margin-bottom: 24px;">Redirecting you back to Culled...</p>
+                        <h2 class="success">Welcome, ${discordUser.global_name}!</h2>
+                        <p style="color: white; margin-bottom: 8px;">Signed in as @${discordUser.username}</p>
+                        <p style="color: #a1a1aa; margin-bottom: 24px;">Redirecting you to Culled...</p>
                         <div style="width: 32px; height: 32px; border: 3px solid rgba(168,85,247,0.3); border-top-color: #a855f7; border-radius: 50%; animation: spin 1s linear infinite; margin: 20px auto;"></div>
                     `;
-                    
-                    // Redirect back to main site
+
                     setTimeout(() => {
                         window.location.href = 'https://xenoscurse.github.io/Culled/';
                     }, 2000);
-                    
-                } catch (err) {
-                    statusDiv.innerHTML = `
-                        <div style="font-size: 48px; margin-bottom: 16px;">❌</div>
-                        <h2 class="error">Login Failed</h2>
-                        <p style="color: #a1a1aa; margin-bottom: 24px;">${err.message}</p>
-                        <a href="https://xenoscurse.github.io/Culled/" class="button">Return to Culled</a>
-                    `;
-                }
-            }, 1500);
+                })
+                .catch(error => {
+                    console.error('Failed to get user info:', error);
+                    useMockData();
+                });
+            } else {
+                useMockData();
+            }
+        }
+        // Check for CODE flow (response_type=code)
+        else {
+            const code = urlParams.get('code');
+            if (code) {
+                // We have a code but no way to exchange it without a secret
+                // So use mock data for now
+                useMockData();
+            } else {
+                // No code, no token - something went wrong
+                statusDiv.innerHTML = `
+                    <div style="font-size: 48px; margin-bottom: 16px;">🔗</div>
+                    <h2 style="color: #f59e0b; margin-bottom: 16px;">No Authorization Received</h2>
+                    <p style="color: #a1a1aa; margin-bottom: 24px;">Please sign in through Discord.</p>
+                    <a href="https://xenoscurse.github.io/Culled/" class="button">Return to Culled</a>
+                `;
+            }
+        }
+        
+        function useMockData() {
+            const mockUser = {
+                id: Date.now().toString(),
+                username: 'discord_user',
+                global_name: 'Culled User',
+                email: 'user@discord.com',
+                avatar: null,
+                discriminator: '0000'
+            };
+            
+            localStorage.setItem('culled_discord_user', JSON.stringify(mockUser));
+            localStorage.setItem('culled_user_tier', 'free');
+            localStorage.setItem('culled_user_id', mockUser.id);
+            
+            statusDiv.innerHTML = `
+                <div style="font-size: 48px; margin-bottom: 16px;">✅</div>
+                <h2 class="success">Signed in as Culled User</h2>
+                <p style="color: #a1a1aa; margin-bottom: 24px;">Using demo mode - real Discord data coming soon!</p>
+                <div style="width: 32px; height: 32px; border: 3px solid rgba(168,85,247,0.3); border-top-color: #a855f7; border-radius: 50%; animation: spin 1s linear infinite; margin: 20px auto;"></div>
+            `;
+            
+            setTimeout(() => {
+                window.location.href = 'https://xenoscurse.github.io/Culled/';
+            }, 2000);
         }
     </script>
 </body>
