@@ -54,6 +54,19 @@
             box-shadow: 0 20px 35px -8px rgba(0, 0, 0, 0.5);
         }
         
+        .logo-container {
+            margin-bottom: 20px;
+        }
+        
+        .logo {
+            width: 64px;
+            height: 64px;
+            object-fit: contain;
+            border-radius: 16px;
+            display: block;
+            margin: 0 auto;
+        }
+        
         .loader {
             width: 48px;
             height: 48px;
@@ -64,8 +77,19 @@
             margin: 20px auto;
         }
         
+        .small-loader {
+            width: 32px;
+            height: 32px;
+            border: 3px solid rgba(168,85,247,0.3);
+            border-top-color: #a855f7;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        
         .success { color: #22c55e; }
         .error { color: #ef4444; }
+        .warning { color: #f59e0b; }
         
         .button {
             background: #5865F2;
@@ -86,6 +110,25 @@
             background: #4752C4;
             transform: translateY(-2px);
         }
+        
+        .avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            margin-bottom: 16px;
+            border: 2px solid #a855f7;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .gradient-text {
+            font-size: 24px;
+            margin-bottom: 8px;
+            background: linear-gradient(to bottom, white, #e9d5ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
     </style>
 </head>
 <body>
@@ -93,13 +136,15 @@
     <div class="overlay"></div>
     
     <div class="card">
-        <img src="https://cdn.discordapp.com/attachments/1470139867169165506/1471681073162358887/culledfinal.gif?ex=698fd14e&is=698e7fce&hm=5cbd8e970c873f2a716af166e30c0ef900d26cf0150189f9217c89483fc5ac6a&" 
-             alt="Culled Logo" 
-             style="width: 64px; height: 64px; object-fit: contain; margin-bottom: 20px; border-radius: 16px;">
+        <!-- Logo is now outside the status div so it's always visible -->
+        <div class="logo-container">
+            <img src="https://cdn.discordapp.com/attachments/1470139867169165506/1471681073162358887/culledfinal.gif?ex=698fd14e&is=698e7fce&hm=5cbd8e970c873f2a716af166e30c0ef900d26cf0150189f9217c89483fc5ac6a&" 
+                 alt="Culled Logo" 
+                 class="logo"
+                 onerror="this.onerror=null; this.src='https://via.placeholder.com/64x64/8b5cf6/ffffff?text=C';">
+        </div>
         
-        <h1 style="font-size: 24px; margin-bottom: 8px; background: linear-gradient(to bottom, white, #e9d5ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
-            Discord Authentication
-        </h1>
+        <h1 class="gradient-text">Discord Authentication</h1>
         
         <div id="status">
             <div class="loader"></div>
@@ -120,28 +165,40 @@
         
         const statusDiv = document.getElementById('status');
         
+        // Function to generate HTML with logo preserved
+        function updateStatus(html) {
+            // Clear status div and set new content
+            statusDiv.innerHTML = html;
+        }
+        
         // Handle Discord error response
         if (error) {
-            statusDiv.innerHTML = `
+            updateStatus(`
                 <div style="font-size: 48px; margin-bottom: 16px;">❌</div>
                 <h2 class="error">Authentication Failed</h2>
                 <p style="color: #a1a1aa; margin-bottom: 24px;">${error}</p>
                 <a href="https://xenoscurse.github.io/Culled/" class="button">Return to Culled</a>
-            `;
+            `);
         } 
         // No access token in URL
         else if (!accessToken) {
-            statusDiv.innerHTML = `
+            updateStatus(`
                 <div style="font-size: 48px; margin-bottom: 16px;">🔗</div>
                 <h2 style="color: #f59e0b; margin-bottom: 16px;">No Authorization Token</h2>
                 <p style="color: #a1a1aa; margin-bottom: 24px;">Please sign in through Discord.</p>
                 <a href="https://xenoscurse.github.io/Culled/" class="button">Return to Culled</a>
-            `;
+            `);
         } 
         // We have an access token - get user data
         else {
             // Clear the hash from URL immediately for security
             window.location.hash = '';
+            
+            // Show initial processing state with logo still visible
+            updateStatus(`
+                <div class="loader"></div>
+                <p style="color: #a1a1aa;">Fetching your Discord profile...</p>
+            `);
             
             // Fetch user info from Discord
             fetch('https://discord.com/api/users/@me', {
@@ -181,16 +238,14 @@
                     ? `https://cdn.discordapp.com/avatars/${discordUser.id}/${discordUser.avatar}.png`
                     : `https://cdn.discordapp.com/embed/avatars/${parseInt(discordUser.discriminator) % 5}.png`;
 
-                statusDiv.innerHTML = `
-                    <img src="${avatarUrl}" 
-                         alt="Avatar" 
-                         style="width: 64px; height: 64px; border-radius: 50%; margin-bottom: 16px; border: 2px solid #a855f7;">
+                updateStatus(`
+                    <img src="${avatarUrl}" alt="Avatar" class="avatar">
                     <h2 class="success">Welcome, ${discordUser.global_name}!</h2>
                     <p style="color: white; margin-bottom: 4px;">@${discordUser.username}</p>
                     <p style="color: #a1a1aa; margin-bottom: 24px; font-size: 14px;">${discordUser.email || 'No email provided'}</p>
-                    <div style="width: 32px; height: 32px; border: 3px solid rgba(168,85,247,0.3); border-top-color: #a855f7; border-radius: 50%; animation: spin 1s linear infinite; margin: 20px auto;"></div>
+                    <div class="small-loader"></div>
                     <p style="color: #a1a1aa; margin-top: 16px;">Redirecting to Culled...</p>
-                `;
+                `);
 
                 // Redirect back to main site
                 setTimeout(() => {
@@ -214,13 +269,14 @@
                 localStorage.setItem('culled_user_tier', 'free');
                 localStorage.setItem('culled_user_id', fallbackUser.id);
                 
-                statusDiv.innerHTML = `
+                updateStatus(`
                     <div style="font-size: 48px; margin-bottom: 16px;">⚠️</div>
                     <h2 style="color: #f59e0b; margin-bottom: 16px;">Using Demo Mode</h2>
                     <p style="color: white; margin-bottom: 8px;">Signed in as Culled User</p>
                     <p style="color: #a1a1aa; margin-bottom: 24px;">Couldn't fetch real Discord data.</p>
-                    <div style="width: 32px; height: 32px; border: 3px solid rgba(168,85,247,0.3); border-top-color: #a855f7; border-radius: 50%; animation: spin 1s linear infinite; margin: 20px auto;"></div>
-                `;
+                    <div class="small-loader"></div>
+                    <p style="color: #a1a1aa; margin-top: 16px;">Redirecting to Culled...</p>
+                `);
                 
                 setTimeout(() => {
                     window.location.href = 'https://xenoscurse.github.io/Culled/';
@@ -230,7 +286,7 @@
 
         // Add fallback for if Discord doesn't redirect properly
         setTimeout(() => {
-            if (document.getElementById('status').querySelector('.loader')) {
+            if (document.querySelector('.loader')) {
                 window.location.href = 'https://xenoscurse.github.io/Culled/';
             }
         }, 5000);
