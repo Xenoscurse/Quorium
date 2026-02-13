@@ -84,10 +84,6 @@
         }
 
         /* Shadow text effect for placeholder */
-        .shadow-placeholder {
-            caret-color: white;
-        }
-        
         .shadow-placeholder::placeholder {
             color: rgba(161, 161, 170, 0.3);
             font-style: italic;
@@ -105,20 +101,21 @@
             border: 1px solid rgba(168, 85, 247, 0.3);
             border-radius: 12px;
             box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
         }
         
-        .options-dropdown a {
+        .options-dropdown a, .options-dropdown button {
             transition: all 0.2s ease;
+            width: 100%;
+            text-align: left;
+            background: transparent;
+            border: none;
+            cursor: pointer;
         }
         
-        .options-dropdown a:hover {
+        .options-dropdown a:hover, .options-dropdown button:hover {
             background: rgba(168, 85, 247, 0.2);
             color: white;
-        }
-
-        /* FIXED: Ensure text is white when content is present */
-        .has-content {
-            color: white !important;
         }
     </style>
 </head>
@@ -149,13 +146,13 @@
                     </svg>
                     Options
                 </button>
-                <div id="dropdownMenu" class="absolute right-0 mt-2 w-48 options-dropdown hidden">
+                <div id="dropdownMenu" class="absolute right-0 mt-2 w-48 options-dropdown hidden" style="z-index: 1000;">
                     <div class="py-2">
-                        <a href="#Features" onclick="closeDropdown()" class="block px-4 py-2 text-sm text-zinc-300 hover:text-white transition-colors">Features</a>
-                        <a href="#Dashboard" onclick="closeDropdown()" class="block px-4 py-2 text-sm text-zinc-300 hover:text-white transition-colors">Dashboard</a>
+                        <a href="#Features" onclick="closeDropdown(); return true;" class="block px-4 py-2 text-sm text-zinc-300 hover:text-white transition-colors">Features</a>
+                        <a href="#Dashboard" onclick="closeDropdown(); return true;" class="block px-4 py-2 text-sm text-zinc-300 hover:text-white transition-colors">Dashboard</a>
                         <a href="https://github.com/Xenoscurse/Prodigy" target="_blank" onclick="closeDropdown()" class="block px-4 py-2 text-sm text-zinc-300 hover:text-white transition-colors">GitHub</a>
                         <div class="border-t border-zinc-800/50 my-2"></div>
-                        <button onclick="closeDropdown(); showLoginModal()" class="w-full text-left px-4 py-2 text-sm text-zinc-300 hover:text-white hover:bg-purple-500/20 transition-colors">Sign In</button>
+                        <button onclick="closeDropdown(); showLoginModal();" class="w-full text-left px-4 py-2 text-sm text-zinc-300 hover:text-white hover:bg-purple-500/20 transition-colors">Sign In</button>
                     </div>
                 </div>
             </div>
@@ -500,11 +497,16 @@
         
         function toggleDropdown() {
             const menu = document.getElementById('dropdownMenu');
-            menu.classList.toggle('hidden');
+            if (menu) {
+                menu.classList.toggle('hidden');
+            }
         }
         
         function closeDropdown() {
-            document.getElementById('dropdownMenu').classList.add('hidden');
+            const menu = document.getElementById('dropdownMenu');
+            if (menu) {
+                menu.classList.add('hidden');
+            }
         }
         
         // Close dropdown when clicking outside
@@ -512,7 +514,7 @@
             const dropdown = document.getElementById('optionsDropdown');
             const menu = document.getElementById('dropdownMenu');
             
-            if (!dropdown.contains(event.target) && !menu.classList.contains('hidden')) {
+            if (dropdown && menu && !dropdown.contains(event.target) && !menu.classList.contains('hidden')) {
                 menu.classList.add('hidden');
             }
         });
@@ -932,18 +934,21 @@ listWeapons();`
         // ----- SET EXAMPLE -----
         window.setExample = function(lang) {
             const input = document.getElementById('inputCode');
-            if (EXAMPLES[lang]) {
+            if (input && EXAMPLES[lang]) {
                 input.value = EXAMPLES[lang];
                 const select = document.getElementById('languageSelect');
-                select.value = lang;
+                if (select) {
+                    select.value = lang;
+                }
                 updateFileNames(lang);
             }
         };
 
         function updateFileNames(lang) {
-            const ext = lang;
-            document.getElementById('inputFileName').textContent = `Input.${ext}`;
-            document.getElementById('outputFileName').textContent = `Output.${ext}`;
+            const inputFileName = document.getElementById('inputFileName');
+            const outputFileName = document.getElementById('outputFileName');
+            if (inputFileName) inputFileName.textContent = `Input.${lang}`;
+            if (outputFileName) outputFileName.textContent = `Output.${lang}`;
         }
 
         // ----- UI UPDATE (All features enabled) -----
@@ -971,13 +976,6 @@ listWeapons();`
                 }
             }
         }
-
-        // ----- INPUT EVENT TO ENSURE PLACEHOLDER WORKS -----
-        const inputCode = document.getElementById('inputCode');
-        inputCode.addEventListener('input', function() {
-            // This just ensures the placeholder behavior works naturally
-            // No need to do anything - the browser handles it
-        });
 
         // =============================================
         // ===== OBFUSCATION ENGINE =====
@@ -1048,6 +1046,7 @@ end
             }
             
             const obfuscateBtn = document.getElementById('obfuscateBtn');
+            const inputCode = document.getElementById('inputCode');
             const outputCode = document.getElementById('outputCode');
             const copyBtn = document.getElementById('copyBtn');
             const copyText = document.getElementById('copyText');
@@ -1055,55 +1054,61 @@ end
             const shieldIcon = document.getElementById('shieldIcon');
             const obfuscateBtnText = document.getElementById('obfuscateBtnText');
             
-            obfuscateBtn.addEventListener('click', () => {
-                const code = inputCode.value.trim();
-                if (!code) {
-                    alert('Please paste some code to obfuscate!');
-                    return;
-                }
-                
-                obfuscateBtn.disabled = true;
-                obfuscateBtnText.textContent = 'Obfuscating...';
-                shieldIcon.classList.add('animate-spin');
-                
-                setTimeout(() => {
-                    try {
-                        const obfuscated = obfuscateCode(code);
-                        outputCode.textContent = obfuscated;
-                        copyBtn.classList.remove('hidden');
-                        copyBtn.classList.add('flex');
-                        recordObfuscation();
-                    } catch (error) {
-                        outputCode.textContent = '-- Error: Failed to obfuscate code';
+            if (obfuscateBtn) {
+                obfuscateBtn.addEventListener('click', () => {
+                    const code = inputCode.value.trim();
+                    if (!code) {
+                        alert('Please paste some code to obfuscate!');
+                        return;
                     }
-                    obfuscateBtn.disabled = false;
-                    obfuscateBtnText.textContent = 'Obfuscate';
-                    shieldIcon.classList.remove('animate-spin');
-                }, 500);
-            });
-            
-            copyBtn.addEventListener('click', async () => {
-                const text = outputCode.textContent;
-                if (text && !text.includes('Click "obfuscate"')) {
-                    await navigator.clipboard.writeText(text);
-                    copyText.textContent = 'Copied!';
-                    copyIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>';
+                    
+                    obfuscateBtn.disabled = true;
+                    obfuscateBtnText.textContent = 'Obfuscating...';
+                    shieldIcon.classList.add('animate-spin');
+                    
                     setTimeout(() => {
-                        copyText.textContent = 'Copy';
-                        copyIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>';
-                    }, 2000);
-                }
-            });
+                        try {
+                            const obfuscated = obfuscateCode(code);
+                            outputCode.textContent = obfuscated;
+                            copyBtn.classList.remove('hidden');
+                            copyBtn.classList.add('flex');
+                            recordObfuscation();
+                        } catch (error) {
+                            outputCode.textContent = '-- Error: Failed to obfuscate code';
+                        }
+                        obfuscateBtn.disabled = false;
+                        obfuscateBtnText.textContent = 'Obfuscate';
+                        shieldIcon.classList.remove('animate-spin');
+                    }, 500);
+                });
+            }
+            
+            if (copyBtn) {
+                copyBtn.addEventListener('click', async () => {
+                    const text = outputCode.textContent;
+                    if (text && !text.includes('Click "obfuscate"')) {
+                        await navigator.clipboard.writeText(text);
+                        copyText.textContent = 'Copied!';
+                        copyIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>';
+                        setTimeout(() => {
+                            copyText.textContent = 'Copy';
+                            copyIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>';
+                        }, 2000);
+                    }
+                });
+            }
             
             const langSelect = document.getElementById('languageSelect');
             
-            langSelect.addEventListener('change', (e) => {
-                const lang = e.target.value;
-                updateFileNames(lang);
-                if (EXAMPLES[lang]) {
-                    setExample(lang);
-                }
-            });
+            if (langSelect) {
+                langSelect.addEventListener('change', (e) => {
+                    const lang = e.target.value;
+                    updateFileNames(lang);
+                    if (EXAMPLES[lang]) {
+                        setExample(lang);
+                    }
+                });
+            }
         });
     </script>
 </body>
